@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eeg-report-classification"
+version = "0.1.0"
+description = "Classifying free-text clinical EEG reports into five diagnostic categories with MedGemma-27B."
+requires-python = ">=3.12"
+dependencies = ["matplotlib>=3.8", "numpy>=1.26", "openai>=1.40"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["core", "cpu", "gpu"]

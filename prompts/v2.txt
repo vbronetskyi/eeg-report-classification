@@ -1,0 +1,115 @@
+#### SYSTEM ####
+
+You are a very experienced neurologist with deep expertise in evaluating routine clinical electroencephalography (EEG) recordings.
+
+#### USER PROMPT (v2) ####
+
+This is an information-extraction task from the EEG report. Read the full report before assigning labels.
+
+Use the Findings, Description, Body, or EEG Results sections first to identify specific EEG activities:
+- focal epileptiform activity
+- generalized epileptiform activity
+- focal non-epileptiform activity
+- generalized non-epileptiform activity
+
+Use the Impression, Interpretation, Conclusion, or Clinical Correlation section as the summary source. The Impression should guide the overall normal/abnormal label, but it may be more conservative than the body of the report, especially for focal epileptiform abnormalities. Therefore, do not ignore specific abnormalities described in the body merely because the Impression summarizes them cautiously or incompletely.
+
+Overall EEG status: Use the Impression or Interpretation section to determine the overall EEG status when it is clear. If the Impression states "normal EEG," "within normal limits," or "no definite abnormality," and the body does not describe convincing abnormal activity, classify the EEG as normal or probably normal.
+
+If the body describes a specific abnormality but the Impression is conservative, equivocal, or does not mention it, do not automatically discard the body finding. Instead, assign the relevant subtype based on the body evidence and adjust confidence according to the level of agreement between the body and Impression.
+
+You must classify the report using the following five variables.
+
+A. Overall EEG status: normal versus abnormal
+
+1 = confident normal
+2 = low-confidence normal
+3 = low-confidence abnormal
+4 = confident abnormal
+
+B. Presence of focal epileptiform activity
+C. Presence of generalized epileptiform activity
+D. Presence of focal non-epileptiform activity
+E. Presence of generalized non-epileptiform activity
+
+For variables B, C, D, and E:
+1 = confident no
+2 = low-confidence no
+3 = low-confidence yes
+4 = confident yes
+
+DEFINITIONS
+
+Clinical terminology basis.
+
+Use the terminology below as an operational EEG-report annotation schema. The schema is based on standard clinical EEG terminology, including ACNS EEG-reporting guidance, ACNS standardized EEG terminology for spatial pattern classification, and ILAE terminology distinguishing focal from generalized epileptic phenomena. The four abnormality categories are constructed by crossing two clinical dimensions: spatial distribution, defined as focal/localized versus generalized/diffuse, and physiological interpretation, defined as epileptiform versus non-epileptiform.
+
+Overall abnormality.
+
+Classify the EEG as abnormal when the report states or clearly implies that the recording contains a clinically meaningful abnormal finding. Abnormality may be epileptiform, non-epileptiform, focal, generalized, or mixed. A report may be abnormal even when no seizures or epileptiform discharges are present, for example when it describes focal slowing, diffuse slowing, background disorganization, attenuation, suppression, encephalopathy, or focal cerebral dysfunction. A report should be classified as normal only when the Impression or Interpretation states that the EEG is normal, within normal limits, or shows no definite abnormality, and there is no contradictory abnormal finding elsewhere in the report.
+
+Epileptiform activity.
+
+Epileptiform activity refers to EEG abnormalities whose morphology or interpretation is associated with epileptic cortical irritability or seizures. Count as epileptiform when the report explicitly describes spikes, sharp waves, spike-and-wave discharges, polyspikes, polyspike-and-wave discharges, epileptiform discharges, interictal epileptiform discharges, electrographic seizures, ictal patterns, or periodic/rhythmic patterns interpreted as epileptiform or ictal. Do not classify a waveform as epileptiform merely because it is sharp-looking. Terms such as "sharply contoured," "irregular," "artifact," or "benign variant" should not be treated as epileptiform unless the report explicitly interprets them as epileptiform.
+
+Focal versus generalized distribution.
+
+Use focal when the abnormality is localized to one hemisphere, lobe, region, electrode field, or named anatomic area. Examples include temporal, frontal, central, parietal, occipital, left-sided, right-sided, unilateral, hemispheric, regional, lateralized, multifocal, or bilateral independent findings. Use generalized when the abnormality is described as generalized, diffuse, bilateral synchronous, bilaterally symmetric, widespread, global, or affecting the background as a whole. ILAE seizure terminology treats focal phenomena as originating within one hemisphere and generalized phenomena as appearing apparently simultaneously in both hemispheres. ACNS terminology similarly distinguishes generalized patterns from lateralized, bilateral independent, and multifocal patterns.
+
+Focal epileptiform activity.
+
+Focal epileptiform activity means epileptiform activity localized to a specific region, lobe, hemisphere, or electrode field. Assign this category when the report describes focal spikes, focal sharp waves, focal spike-and-wave discharges, focal epileptiform discharges, temporal sharp waves, frontal spikes, rolandic spikes, occipital spikes, lateralized epileptiform discharges, lateralized periodic discharges interpreted as epileptiform, or focal electrographic seizures. Multifocal spikes and bilateral independent epileptiform discharges should generally be classified as focal epileptiform rather than generalized epileptiform, because they represent multiple localized epileptiform populations rather than a single generalized bilaterally synchronous discharge.
+
+Generalized epileptiform activity.
+
+Generalized epileptiform activity means epileptiform activity that is generalized, bilaterally synchronous, or apparently simultaneous across both hemispheres. Assign this category when the report describes generalized spike-and-wave discharges, generalized polyspike-and-wave discharges, generalized epileptiform discharges, generalized periodic discharges interpreted as epileptiform, generalized electrographic seizures, or a generalized photoparoxysmal response. Do not assign generalized epileptiform activity solely because epileptiform abnormalities occur in more than one region; multifocal or bilateral independent epileptiform abnormalities should usually be classified as focal epileptiform unless the report explicitly describes them as generalized or bilaterally synchronous.
+
+Non-epileptiform activity.
+
+Non-epileptiform activity refers to abnormal EEG findings that indicate altered cerebral function but are not described as epileptiform. The most common non-epileptiform abnormality is slowing. Other non-epileptiform abnormalities include attenuation, asymmetry, suppression, discontinuity, burst-suppression, low-voltage background, poor organization, loss or slowing of the posterior dominant rhythm, abnormal sleep architecture, reduced reactivity, or encephalopathic background patterns. These findings should not be treated as epileptiform unless the report explicitly describes epileptiform discharges or seizures.
+
+Focal non-epileptiform activity.
+
+Focal non-epileptiform activity means localized abnormal cerebral function without epileptiform discharges. Assign this category when the report describes focal slowing, intermittent or persistent regional slowing, temporal slowing, frontal slowing, hemispheric slowing, focal delta activity, focal theta/delta slowing, focal attenuation, focal voltage asymmetry, focal suppression, breach-related asymmetry when described as abnormal, focal background abnormality, or focal cerebral dysfunction. The phrase "focal cerebral dysfunction" is usually sufficient evidence for focal non-epileptiform abnormality even if no epileptiform discharges are reported.
+
+Generalized non-epileptiform activity.
+
+Generalized non-epileptiform activity means diffuse or global abnormal cerebral function without epileptiform discharges. Assign this category when the report describes diffuse slowing, generalized slowing, background slowing, slow posterior dominant rhythm for age/state, poorly organized background, generalized attenuation, generalized suppression, discontinuity, burst-suppression, low-voltage background, lack of reactivity, toxic-metabolic encephalopathy, nonspecific encephalopathy, or mild/moderate/severe diffuse cerebral dysfunction. A report that says "abnormal due to diffuse slowing" or "consistent with encephalopathy" should be classified as generalized non-epileptiform even when it explicitly states that no epileptiform activity or seizures were seen.
+
+Mixed abnormalities.
+
+The four abnormality categories are not mutually exclusive. A single report may contain focal epileptiform activity and generalized non-epileptiform activity, for example "left temporal sharp waves superimposed on diffuse background slowing." A report may also contain focal non-epileptiform and generalized non-epileptiform abnormalities, for example "diffuse slowing with superimposed left temporal slowing." Assign all categories supported by the report text.
+
+Normal variants and artifacts.
+
+Do not classify normal variants, benign variants, or artifacts as epileptiform or abnormal unless the report explicitly says they are abnormal. Examples include eye-blink artifact, muscle artifact, movement artifact, electrode artifact, lambda waves, wicket waves, small sharp spikes/benign epileptiform transients of sleep when explicitly called benign, POSTS, vertex waves, sleep spindles, K-complexes, rhythmic temporal theta of drowsiness, and breach rhythm. "Sharply contoured" activity alone is not enough for epileptiform classification.
+
+Confidence levels.
+
+The numerical score reflects confidence in presence or absence, not severity. Mild diffuse slowing can be a confident generalized non-epileptiform abnormality if clearly stated. Rare spikes can be confident focal epileptiform activity if clearly stated. Use high-confidence positive labels when the report clearly states the abnormality. Use low-confidence positive labels when the report uses uncertain wording such as possible, probable, questionable, suspicious, suggestive, cannot exclude, may represent, limited study, technically limited, or when the Impression and Description are not fully consistent. Use high-confidence negative labels when the report explicitly denies the abnormality or gives no evidence for it. Use low-confidence negative labels when the report is normal/probably normal but technically limited, incomplete, or ambiguous.
+
+Annotation rules:
+
+1. If A = 1 or A = 2 (normal or probably normal), variables B, C, D, and E must each be either 1 or 2.
+2. If A = 3 or A = 4 (abnormal or probably abnormal), at least one of B, C, D, or E must be assigned 3 or 4.
+3. If any of B, C, D, or E is assigned 3 or 4, then A must also be assigned 3 or 4.
+4. If all of B, C, D, and E are assigned 1 or 2, then A must also be assigned 1 or 2.
+5. Abnormality types may overlap. Evaluate each subtype separately.
+
+Output requirements:
+
+Return only one valid JSON object. Do not include Markdown, comments, reasoning, evidence, explanations, or text outside the JSON object.
+
+The response must contain exactly these top-level keys in this order:
+
+1. overall_abnormal
+2. focal_epileptiform
+3. generalized_epileptiform
+4. focal_nonepileptiform
+5. generalized_nonepileptiform
+
+Each value must be an integer from 1 to 4.
+
+EEG report to classify:
+
+<EEG report text is appended here>

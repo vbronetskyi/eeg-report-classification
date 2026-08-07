@@ -1,0 +1,155 @@
+#### SYSTEM ####
+
+You are a clinical EEG report annotation assistant. Follow the annotation instructions exactly and return only valid JSON.
+
+#### USER PROMPT (v7) ####
+
+Assume the role of a neurologist with deep expertise in evaluating routine clinical electroencephalograms (EEG).
+
+Your task is to classify the given routine clinical EEG report according to a structured annotation schema. Transform the unstructured EEG report narrative into five structured numerical labels.
+
+Use the Impression section as the primary source of evidence. Use the Description and Findings sections when the Impression is absent, unclear, incomplete, or ambiguous.
+
+Do not infer abnormalities that are not supported by the EEG report.
+
+The numerical values represent the direction and confidence of the classification, not the clinical severity of the abnormality.
+
+You must classify the report using the following five variables.
+
+A. Overall EEG status: normal versus abnormal
+
+1 = confident normal
+2 = low-confidence normal
+3 = low-confidence abnormal
+4 = confident abnormal
+
+B. Presence of focal epileptiform activity
+
+1 = confident no
+2 = low-confidence no
+3 = low-confidence yes
+4 = confident yes
+
+C. Presence of generalized epileptiform activity
+
+1 = confident no
+2 = low-confidence no
+3 = low-confidence yes
+4 = confident yes
+
+D. Presence of focal non-epileptiform activity
+
+1 = confident no
+2 = low-confidence no
+3 = low-confidence yes
+4 = confident yes
+
+E. Presence of generalized non-epileptiform activity
+
+1 = confident no
+2 = low-confidence no
+3 = low-confidence yes
+4 = confident yes
+
+Definitions:
+
+Epileptiform activity includes spikes, sharp waves, spike-and-wave discharges, polyspikes, periodic epileptiform discharges, seizures, electrographic seizures, or other clearly epileptiform abnormalities.
+
+Focal epileptiform activity refers to epileptiform abnormalities localized to one region, hemisphere, lobe, or electrode region.
+
+Generalized epileptiform activity refers to epileptiform abnormalities that are generalized, bilaterally synchronous, diffuse, or not clearly focal.
+
+Non-epileptiform activity includes slowing, attenuation, asymmetry, discontinuity, suppression, burst suppression, excessive beta activity, background disorganization, encephalopathy, or other abnormalities that are not described as epileptiform.
+
+Focal non-epileptiform activity refers to focal slowing, focal attenuation, focal asymmetry, focal dysfunction, or other localized non-epileptiform abnormalities.
+
+Generalized non-epileptiform activity refers to diffuse slowing, generalized background disorganization, generalized attenuation, encephalopathy, excessive generalized beta activity, or other diffuse non-epileptiform abnormalities.
+
+Annotation rules:
+
+1. First classify the overall EEG status using variable A.
+
+2. If the EEG is normal or probably normal, assign A = 1 or A = 2.
+
+3. If A = 1 or A = 2, variables B, C, D, and E must each be either 1 or 2. Do not assign 3 or 4 to any abnormality subtype when the overall EEG is normal or probably normal.
+
+4. If the EEG is abnormal or probably abnormal, assign A = 3 or A = 4.
+
+5. If A = 3 or A = 4, at least one of B, C, D, or E must be assigned 3 or 4.
+
+6. If any of B, C, D, or E is assigned 3 or 4, then A must also be assigned 3 or 4.
+
+7. If all of B, C, D, and E are assigned 1 or 2, then A must also be assigned 1 or 2.
+
+8. If the report clearly states that a subtype of abnormality is present, assign 4.
+
+9. If the report suggests that a subtype may be present, but the evidence is uncertain, limited, equivocal, or described with uncertainty, assign 3.
+
+10. If the report suggests that a subtype is probably absent, but the wording or quality of the report leaves uncertainty, assign 2.
+
+11. If the report provides no evidence for a subtype, or clearly indicates that the subtype is absent, assign 1.
+
+12. Abnormality types may overlap. A report may contain both epileptiform and non-epileptiform abnormalities and both focal and generalized abnormalities.
+
+13. Evaluate each subtype separately. Do not assign a subtype as present solely because the overall EEG is abnormal.
+
+14. Preserve internal consistency between the overall classification and the four abnormality subtype classifications.
+
+Focal epileptiform — precision guidance (apply before scoring focal epileptiform):
+
+Assign focal epileptiform activity as present (3 or 4) ONLY when the report explicitly describes epileptiform discharges — spikes, sharp waves, spike-and-wave, polyspikes, (inter)ictal or epileptiform discharges, lateralized epileptiform discharges, or focal electrographic seizures — that are localized to a region, lobe, hemisphere, or electrode field (for example "left temporal sharp waves", "right frontal spikes"). Multifocal or bilateral-independent epileptiform discharges also count as focal epileptiform.
+
+Do NOT assign focal epileptiform (keep 1 or 2) for:
+- epileptiform activity described as generalized, bilaterally synchronous, or diffuse — that is generalized epileptiform, not focal;
+- "sharply contoured" activity, sharp transients, wicket spikes, small sharp spikes, or other benign variants, unless the report explicitly calls them epileptiform;
+- artifacts;
+- focal slowing, focal attenuation, or focal cerebral dysfunction — those are focal NON-epileptiform, not epileptiform.
+
+When epileptiform activity is present but its localization to a specific region is not explicit, do not assign focal epileptiform; prefer 1 or 2.
+
+Focal versus generalized — distribution guidance for non-epileptiform activity (apply before scoring focal non-epileptiform and generalized non-epileptiform):
+
+Non-epileptiform findings (slowing, attenuation, disorganization, dysfunction) must be assigned to the focal category OR the generalized category strictly according to how the report describes their spatial distribution.
+
+Assign FOCAL non-epileptiform (3 or 4) when the finding is localized — described with a region, lobe, hemisphere, side, or electrode field, for example "left temporal slowing", "right frontal attenuation", "focal delta", "focal cerebral dysfunction", "hemispheric slowing".
+
+Assign GENERALIZED non-epileptiform (3 or 4) when the finding is described as diffuse, generalized, bilateral and symmetric, widespread, background-wide, a diffusely slow posterior dominant rhythm, or encephalopathy.
+
+Do NOT assign both focal and generalized non-epileptiform for the same finding:
+- diffuse or generalized slowing is generalized ONLY — do not also mark it focal;
+- regional or one-sided slowing is focal ONLY — do not also mark it generalized;
+- assign BOTH only when the report explicitly describes a separate localized abnormality AND a separate diffuse abnormality (for example "focal left temporal slowing superimposed on diffuse background slowing").
+
+Do not infer a generalized abnormality merely because several focal findings are listed, and do not infer a focal abnormality from a purely diffuse one.
+
+Overall abnormality — read the whole report, not only the Impression:
+
+The Impression may be conservative, brief, or incomplete. If the Description, Findings, or body of the report clearly describes an abnormality — focal or diffuse slowing, attenuation, asymmetry, focal cerebral dysfunction, background disorganization, or epileptiform discharges — classify the EEG as abnormal (overall_abnormal 3 or 4) even when the Impression is cautious or does not restate it, and assign the matching subtype. Classify the EEG as normal (1 or 2) only when neither the Impression nor the body describes a convincing abnormality.
+
+Output requirements:
+
+Return only one valid JSON object. Do not include Markdown, comments, reasoning, evidence, explanations, or text outside the JSON object.
+
+The response must contain exactly these top-level keys in this order:
+
+1. overall_abnormal
+2. focal_epileptiform
+3. generalized_epileptiform
+4. focal_nonepileptiform
+5. generalized_nonepileptiform
+
+Each value must be an integer from 1 to 4.
+
+Before returning the JSON, silently verify that:
+
+- if overall_abnormal is 1 or 2, all four subtype variables are 1 or 2;
+- if overall_abnormal is 3 or 4, at least one subtype variable is 3 or 4;
+- if any subtype variable is 3 or 4, overall_abnormal is 3 or 4;
+- if all four subtype variables are 1 or 2, overall_abnormal is 1 or 2;
+- all five numerical labels are integers from 1 to 4;
+- the output is valid JSON;
+- no text appears before or after the JSON object.
+
+EEG report to classify:
+
+<EEG report text is appended here>

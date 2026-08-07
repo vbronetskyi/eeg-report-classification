@@ -1,0 +1,72 @@
+{
+  "cohort_size": 1495,
+  "contains_report_text": false,
+  "contains_hashed_ids": false,
+  "fields": {
+    "abnormality": {
+      "count": 1495,
+      "min": 173,
+      "p50": 290,
+      "p90": 378,
+      "p95": 408,
+      "p99": 465,
+      "max": 695,
+      "over_512": 5,
+      "over_1024": 0,
+      "over_2048": 0,
+      "over_4096": 0
+    },
+    "focal_epileptiform_activity": {
+      "count": 1495,
+      "min": 199,
+      "p50": 316,
+      "p90": 404,
+      "p95": 434,
+      "p99": 491,
+      "max": 721,
+      "over_512": 6,
+      "over_1024": 0,
+      "over_2048": 0,
+      "over_4096": 0
+    },
+    "generalized_epileptiform_activity": {
+      "count": 1495,
+      "min": 198,
+      "p50": 315,
+      "p90": 403,
+      "p95": 433,
+      "p99": 490,
+      "max": 720,
+      "over_512": 6,
+      "over_1024": 0,
+      "over_2048": 0,
+      "over_4096": 0
+    },
+    "focal_non_epileptiform_activity": {
+      "count": 1495,
+      "min": 223,
+      "p50": 340,
+      "p90": 428,
+      "p95": 458,
+      "p99": 515,
+      "max": 745,
+      "over_512": 18,
+      "over_1024": 0,
+      "over_2048": 0,
+      "over_4096": 0
+    },
+    "generalized_non_epileptiform_activity": {
+      "count": 1495,
+      "min": 222,
+      "p50": 339,
+      "p90": 427,
+      "p95": 457,
+      "p99": 514,
+      "max": 744,
+      "over_512": 16,
+      "over_1024": 0,
+      "over_2048": 0,
+      "over_4096": 0
+    }
+  }
+}

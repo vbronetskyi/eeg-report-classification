@@ -1,0 +1,2093 @@
+{
+  "experiment": {
+    "name": "medgemma_q2_joint_prompt",
+    "model": "medgemma-q2",
+    "prompt_type": "joint_five_field",
+    "generated_evidence_saved": false,
+    "generated_raw_output_saved": false,
+    "contains_report_text": false,
+    "contains_hashed_ids": false
+  },
+  "dataset": {
+    "name": "zoe_candidate_cohort_n1495",
+    "selection": "1536 common fully annotated SG/LD reports ordered by LD rowid; initial rowid 1..41 block excluded",
+    "reference_used": "LD",
+    "secondary_annotator": "SG",
+    "paper_cohort_status": "strong candidate, not independently confirmed"
+  },
+  "cases": [
+    {
+      "case_id": "case_001",
+      "selection_reason": "cohort_index_0010",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 3,
+        "generalized_non_epileptiform_activity": 3
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0016751402979837068,
+          "p2": 0.001016023950047275,
+          "p3": 0.014025777993248537,
+          "p4": 0.9832830577587205,
+          "p_presence": 0.997308835751969
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9990975780290707,
+          "p2": 0.00033515984054955966,
+          "p3": 0.0004876546905244146,
+          "p4": 7.960743985523455e-05,
+          "p_presence": 0.0005672621303796492
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999438278528753,
+          "p2": 0.0001910333996437972,
+          "p3": 0.0002958783174193961,
+          "p4": 7.480975418370859e-05,
+          "p_presence": 0.0003706880716031047
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.001305980530877542,
+          "p2": 0.00033020374700932473,
+          "p3": 0.014040613908223452,
+          "p4": 0.9843232018138897,
+          "p_presence": 0.9983638157221131
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9862750732433072,
+          "p2": 0.00517549742254806,
+          "p3": 0.006645470234553605,
+          "p4": 0.0019039590995912202,
+          "p_presence": 0.008549429334144825
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_002",
+      "selection_reason": "cohort_index_0011",
+      "ld_labels": {
+        "abnormality": 2,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 2,
+        "generalized_non_epileptiform_activity": 2
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 2,
+          "p1": 0.1468504535664618,
+          "p2": 0.8450660256586815,
+          "p3": 0.0064521594000741984,
+          "p4": 0.001631361374782556,
+          "p_presence": 0.008083520774856754
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.990980376315602,
+          "p2": 0.007566229768319325,
+          "p3": 0.0013148135838929966,
+          "p4": 0.00013858033218572762,
+          "p_presence": 0.0014533939160787243
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9973340132085262,
+          "p2": 0.001925307285898899,
+          "p3": 0.0006250557607900852,
+          "p4": 0.00011562374478475983,
+          "p_presence": 0.0007406795055748451
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9774095383999056,
+          "p2": 0.01790188081863405,
+          "p3": 0.00399444953401992,
+          "p4": 0.0006941312474404344,
+          "p_presence": 0.004688580781460354
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9985584688099021,
+          "p2": 0.0010318083232449579,
+          "p3": 0.00033497895825190463,
+          "p4": 7.474390860110166e-05,
+          "p_presence": 0.0004097228668530063
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_003",
+      "selection_reason": "cohort_index_0012",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9928872568275268,
+          "p2": 0.006690020348076928,
+          "p3": 0.00033307650045210697,
+          "p4": 8.964632394417895e-05,
+          "p_presence": 0.00042272282439628593
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999331161582826,
+          "p2": 0.00045821631734367527,
+          "p3": 0.00017944008810690494,
+          "p4": 3.118201172343219e-05,
+          "p_presence": 0.00021062209983033713
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999877566813496,
+          "p2": 7.966959262028725e-05,
+          "p3": 3.5353167420507916e-05,
+          "p4": 7.410426463197663e-06,
+          "p_presence": 4.276359388370558e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9993509560879067,
+          "p2": 0.0005527254065232363,
+          "p3": 7.962764454207569e-05,
+          "p4": 1.669086102803903e-05,
+          "p_presence": 9.631850557011473e-05
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9993437714857062,
+          "p2": 0.00045822215069780167,
+          "p3": 0.0001397499268424939,
+          "p4": 5.8256436753485794e-05,
+          "p_presence": 0.0001980063635959797
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_004",
+      "selection_reason": "cohort_index_0013",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9975525957126173,
+          "p2": 0.0021821376955516746,
+          "p3": 0.0002299956209983601,
+          "p4": 3.5270970832682244e-05,
+          "p_presence": 0.00026526659183104235
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9990027421901103,
+          "p2": 0.0007094661252157203,
+          "p3": 0.00024518493214117085,
+          "p4": 4.2606752532801046e-05,
+          "p_presence": 0.0002877916846739719
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996700292959748,
+          "p2": 0.00020340129160219074,
+          "p3": 0.00010227659241765708,
+          "p4": 2.429282000533423e-05,
+          "p_presence": 0.0001265694124229913
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9992374099984046,
+          "p2": 0.0006262488748071457,
+          "p3": 0.00010882568466449924,
+          "p4": 2.7515442123746786e-05,
+          "p_presence": 0.00013634112678824603
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996349592718046,
+          "p2": 0.00021651181277360562,
+          "p3": 9.025555155706031e-05,
+          "p4": 5.827336386475263e-05,
+          "p_presence": 0.00014852891542181294
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_005",
+      "selection_reason": "cohort_index_0014",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9868543244016879,
+          "p2": 0.012422662156918821,
+          "p3": 0.0005458136826145575,
+          "p4": 0.00017719975877876327,
+          "p_presence": 0.0007230134413933208
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9993208507561786,
+          "p2": 0.00043045005296761703,
+          "p3": 0.00020333011069212514,
+          "p4": 4.536908016173185e-05,
+          "p_presence": 0.000248699190853857
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9999019871078395,
+          "p2": 5.143981765218914e-05,
+          "p3": 3.7634174544506926e-05,
+          "p4": 8.938899963792725e-06,
+          "p_presence": 4.657307450829965e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996760196713671,
+          "p2": 0.00023048510236953806,
+          "p3": 7.965351998566967e-05,
+          "p4": 1.3841706277618662e-05,
+          "p_presence": 9.349522626328832e-05
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996969311986341,
+          "p2": 0.0002034067716184852,
+          "p3": 6.203556038278373e-05,
+          "p4": 3.7626469364612716e-05,
+          "p_presence": 9.966202974739645e-05
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_006",
+      "selection_reason": "cohort_index_0015",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9978430028821983,
+          "p2": 0.0019262897373579393,
+          "p3": 0.00019072851239206937,
+          "p4": 3.997886805176701e-05,
+          "p_presence": 0.0002307073804438364
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9975079969894735,
+          "p2": 0.001925643305997306,
+          "p3": 0.0004868788751524746,
+          "p4": 7.948082937667631e-05,
+          "p_presence": 0.0005663597045291508
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9998264177736285,
+          "p2": 0.00010229260891023529,
+          "p3": 5.828457165396945e-05,
+          "p4": 1.3005045807332836e-05,
+          "p_presence": 7.128961746130229e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997251427725844,
+          "p2": 0.00020341241191154953,
+          "p3": 5.474770795219031e-05,
+          "p4": 1.669710755184348e-05,
+          "p_presence": 7.144481550403378e-05
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996873219768766,
+          "p2": 0.00021652321629296874,
+          "p3": 7.029479640987793e-05,
+          "p4": 2.5860010420526207e-05,
+          "p_presence": 9.615480683040414e-05
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_007",
+      "selection_reason": "cohort_index_0016",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.6908348350516116,
+          "p2": 0.15414610575682683,
+          "p3": 0.0775095295957808,
+          "p4": 0.0775095295957808,
+          "p_presence": 0.1550190591915616
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9992557932089998,
+          "p2": 0.0005526728009262827,
+          "p3": 0.0001583434085595369,
+          "p4": 3.319058151439755e-05,
+          "p_presence": 0.00019153399007393443
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9998784281930615,
+          "p2": 6.604850841038618e-05,
+          "p3": 4.5394431710593787e-05,
+          "p4": 1.012886681743175e-05,
+          "p_presence": 5.552329852802554e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9969938885874237,
+          "p2": 0.0024713007294553317,
+          "p3": 0.0004866279665703961,
+          "p4": 4.81827165505972e-05,
+          "p_presence": 0.0005348106831209933
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9987425982110718,
+          "p2": 0.0007092815773737539,
+          "p3": 0.0003796510703272782,
+          "p4": 0.00016846914122713258,
+          "p_presence": 0.0005481202115544107
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_009",
+      "selection_reason": "cohort_index_0018",
+      "ld_labels": {
+        "abnormality": 2,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 2,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 2,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 3,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0026644569990336505,
+          "p2": 0.011941267810954871,
+          "p3": 0.03678170307818607,
+          "p4": 0.9486125721118255,
+          "p_presence": 0.9853942751900115
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9986696096022112,
+          "p2": 0.0009106687146279298,
+          "p3": 0.0003350162978296385,
+          "p4": 8.470538533124836e-05,
+          "p_presence": 0.00041972168316088687
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999492108322751,
+          "p2": 0.0001685955049794232,
+          "p3": 0.00023044273291723133,
+          "p4": 0.00010885343935233093,
+          "p_presence": 0.0003392961722695623
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 3,
+          "p1": 0.004552616407962817,
+          "p2": 0.0006161296310392981,
+          "p3": 0.6756682034244677,
+          "p4": 0.31916305053653016,
+          "p_presence": 0.9948312539609978
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9809939892179791,
+          "p2": 0.013993128820225312,
+          "p3": 0.003538017034949517,
+          "p4": 0.0014748649268460235,
+          "p_presence": 0.00501288196179554
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_010",
+      "selection_reason": "cohort_index_0019",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0004835327523020016,
+          "p2": 0.0002932774392463984,
+          "p3": 0.008570823111170637,
+          "p4": 0.990652366697281,
+          "p_presence": 0.9992231898084516
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9988489685437746,
+          "p2": 0.000709357056198895,
+          "p3": 0.00037969147123104613,
+          "p4": 6.198292879550954e-05,
+          "p_presence": 0.0004416744000265557
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997900419002943,
+          "p2": 9.609148147192771e-05,
+          "p3": 9.609148147192771e-05,
+          "p4": 1.777513676184398e-05,
+          "p_presence": 0.0001138666182337717
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9838248691815998,
+          "p2": 0.0075115951932903,
+          "p3": 0.0075115951932903,
+          "p4": 0.001151940431819558,
+          "p_presence": 0.008663535625109858
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.017502337835959423,
+          "p2": 0.0014366793771797412,
+          "p3": 0.025465751287068267,
+          "p4": 0.9555952314997925,
+          "p_presence": 0.9810609827868608
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_012",
+      "selection_reason": "cohort_index_0021",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 4,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 4,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0011621080399300428,
+          "p2": 0.00042751565631030434,
+          "p3": 0.005901671593240759,
+          "p4": 0.9925087047105189,
+          "p_presence": 0.9984103763037596
+        },
+        "focal_epileptiform_activity": {
+          "pred": 3,
+          "p1": 0.036474969839250394,
+          "p2": 0.017229555764299194,
+          "p3": 0.9407018566060824,
+          "p4": 0.00559361779036801,
+          "p_presence": 0.9462954743964505
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.002586212578982098,
+          "p2": 0.0010780937989924412,
+          "p3": 0.0755802103267723,
+          "p4": 0.9207554832952531,
+          "p_presence": 0.9963356936220255
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9677105880774365,
+          "p2": 0.009487099118939997,
+          "p3": 0.01772423457671845,
+          "p4": 0.005078078226905076,
+          "p_presence": 0.022802312803623527
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.013832216718335202,
+          "p2": 0.0007803602680280801,
+          "p3": 0.015673954976866626,
+          "p4": 0.96971346803677,
+          "p_presence": 0.9853874230136367
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_013",
+      "selection_reason": "cohort_index_0022",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9929756345988823,
+          "p2": 0.006690615882543737,
+          "p3": 0.00025942345445468433,
+          "p4": 7.432606411930811e-05,
+          "p_presence": 0.00033374951857399244
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.99927574592859,
+          "p2": 0.0004877417197048947,
+          "p3": 0.00020332109530868153,
+          "p4": 3.319125639636583e-05,
+          "p_presence": 0.00023651235170504736
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997446044735161,
+          "p2": 0.00017951436186580436,
+          "p3": 6.203850341557866e-05,
+          "p4": 1.3842661202486977e-05,
+          "p_presence": 7.588116461806564e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999329808183173,
+          "p2": 0.0005527135694515457,
+          "p3": 9.604721656216658e-05,
+          "p4": 2.1431030813327152e-05,
+          "p_presence": 0.00011747824737549374
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9999207891436138,
+          "p2": 4.539634962207522e-05,
+          "p3": 2.4298914948259504e-05,
+          "p4": 9.515591815879402e-06,
+          "p_presence": 3.3814506764138904e-05
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_014",
+      "selection_reason": "cohort_index_0023",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 3
+      },
+      "sg_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.010059734392471308,
+          "p2": 0.018794058111576414,
+          "p3": 0.06559770837186933,
+          "p4": 0.905548499124083,
+          "p_presence": 0.9711462074959523
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9966144255142414,
+          "p2": 0.0019239180296386068,
+          "p3": 0.0013222882350432661,
+          "p4": 0.00013936822107676712,
+          "p_presence": 0.0014616564561200332
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9983986852239536,
+          "p2": 0.00043005282878588226,
+          "p3": 0.0009104218456840405,
+          "p4": 0.00026084010157650294,
+          "p_presence": 0.0011712619472605435
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9850635644916191,
+          "p2": 0.00585740163345302,
+          "p3": 0.00663730559993839,
+          "p4": 0.00244172827498942,
+          "p_presence": 0.009079033874927811
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.03341467470868494,
+          "p2": 0.0018851265003892754,
+          "p3": 0.10292444403880657,
+          "p4": 0.8617757547521192,
+          "p_presence": 0.9647001987909258
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_015",
+      "selection_reason": "cohort_index_0024",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 3,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0008649122668725137,
+          "p2": 0.003420794374075949,
+          "p3": 0.04722262097096124,
+          "p4": 0.9484916723880903,
+          "p_presence": 0.9957142933590515
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9917866995683106,
+          "p2": 0.005897379797680994,
+          "p3": 0.0019145989022664202,
+          "p4": 0.00040132173174203345,
+          "p_presence": 0.0023159206340084538
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9992069609448797,
+          "p2": 0.00024523495527765894,
+          "p3": 0.00019098917520672174,
+          "p4": 0.00035681492463584646,
+          "p_presence": 0.0005478040998425682
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0020660223349729836,
+          "p2": 0.0003168347866806636,
+          "p3": 0.1641244436713208,
+          "p4": 0.8334926992070255,
+          "p_presence": 0.9976171428783464
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9973483682865565,
+          "p2": 0.0006653780752393057,
+          "p3": 0.001499452639200743,
+          "p4": 0.00048680099900351057,
+          "p_presence": 0.0019862536382042537
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_016",
+      "selection_reason": "cohort_index_0025",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9989219035854393,
+          "p2": 0.0009108987317638974,
+          "p3": 0.0001396909114185412,
+          "p4": 2.750677137822563e-05,
+          "p_presence": 0.00016719768279676683
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9986829443778648,
+          "p2": 0.0010319366559832384,
+          "p3": 0.0002451064397837668,
+          "p4": 4.001252636826631e-05,
+          "p_presence": 0.0002851189661520331
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997597080735572,
+          "p2": 0.0001398080378767554,
+          "p3": 8.479786144651729e-05,
+          "p4": 1.5686027119522396e-05,
+          "p_presence": 0.00010048388856603968
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9991649658499753,
+          "p2": 0.0005526226483023492,
+          "p3": 0.0002164101385042337,
+          "p4": 6.600136321816502e-05,
+          "p_presence": 0.00028241150172239875
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996618377843279,
+          "p2": 0.0001910762620665951,
+          "p3": 0.00011589361128667598,
+          "p4": 3.119234231884817e-05,
+          "p_presence": 0.00014708595360552414
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_017",
+      "selection_reason": "cohort_index_0026",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 2,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.00029355414647423917,
+          "p2": 0.0005484313474379639,
+          "p3": 0.00757086122167211,
+          "p4": 0.9915871532844157,
+          "p_presence": 0.9991580145060879
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9880970000252315,
+          "p2": 0.0075442122943724385,
+          "p3": 0.00356363355463909,
+          "p4": 0.0007951541257569383,
+          "p_presence": 0.004358787680396028
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9986859192913177,
+          "p2": 0.0006259032123416488,
+          "p3": 0.00045792057235705894,
+          "p4": 0.00023025692398365638,
+          "p_presence": 0.0006881774963407154
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0019021149872438534,
+          "p2": 0.0003745486485691914,
+          "p3": 0.012403347777886186,
+          "p4": 0.9853199885863008,
+          "p_presence": 0.997723336364187
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9965082135163755,
+          "p2": 0.0021798528637256825,
+          "p3": 0.0010960988552116597,
+          "p4": 0.00021583476468713851,
+          "p_presence": 0.0013119336198987982
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_018",
+      "selection_reason": "cohort_index_0027",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9389418878901198,
+          "p2": 0.060024545795768124,
+          "p3": 0.0007555975205146227,
+          "p4": 0.00027796879359744684,
+          "p_presence": 0.0010335663141120696
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9992211580388364,
+          "p2": 0.000626238680629265,
+          "p3": 0.00012331370768037283,
+          "p4": 2.928957285394004e-05,
+          "p_presence": 0.00015260328053431286
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996041213394673,
+          "p2": 0.00026115514059355747,
+          "p3": 0.00010886565935725516,
+          "p4": 2.5857860581902374e-05,
+          "p_presence": 0.00013472351993915754
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9988388298610271,
+          "p2": 0.0008037984057256808,
+          "p3": 0.0003147719783960172,
+          "p4": 4.2599754851173914e-05,
+          "p_presence": 0.0003573717332471911
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9985516286155254,
+          "p2": 0.0009105611482433169,
+          "p3": 0.0003795783592974908,
+          "p4": 0.00015823187693382706,
+          "p_presence": 0.0005378102362313178
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_019",
+      "selection_reason": "cohort_index_0028",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 3,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.7498557564515879,
+          "p2": 0.16216768993330125,
+          "p3": 0.049458351071334804,
+          "p4": 0.038518202543776,
+          "p_presence": 0.08797655361511081
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9980214132145824,
+          "p2": 0.0015004642219366732,
+          "p3": 0.00042989019710194977,
+          "p4": 4.823236637899548e-05,
+          "p_presence": 0.00047812256348094527
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9998894559201601,
+          "p2": 5.143919132319643e-05,
+          "p3": 4.832264826957233e-05,
+          "p4": 1.078224024718592e-05,
+          "p_presence": 5.910488851675825e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.996407394940388,
+          "p2": 0.00317134574617499,
+          "p3": 0.0003787632358657139,
+          "p4": 4.249607757126067e-05,
+          "p_presence": 0.00042125931343697456
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9990517276112832,
+          "p2": 0.0007095010985048676,
+          "p3": 0.00016852120170881342,
+          "p4": 7.025008850298525e-05,
+          "p_presence": 0.0002387712902117987
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_020",
+      "selection_reason": "cohort_index_0029",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9956883649870858,
+          "p2": 0.004069151449995127,
+          "p3": 0.0002025910248371485,
+          "p4": 3.9892538082017396e-05,
+          "p_presence": 0.0002424835629191659
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997377503263303,
+          "p2": 0.00017951315165031282,
+          "p3": 6.603919791204146e-05,
+          "p4": 1.669732410735022e-05,
+          "p_presence": 8.273652201939168e-05
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9999219723317326,
+          "p2": 4.264597428131403e-05,
+          "p3": 2.5866090914933394e-05,
+          "p4": 9.515603071075418e-06,
+          "p_presence": 3.5381693986008815e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9991430032538422,
+          "p2": 0.0006261895557954687,
+          "p3": 0.00017940639702676954,
+          "p4": 5.140079333557323e-05,
+          "p_presence": 0.00023080719036234278
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997114039475078,
+          "p2": 0.00015841552470990348,
+          "p3": 8.479372005580834e-05,
+          "p4": 4.538680772651132e-05,
+          "p_presence": 0.00013018052778231967
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_021",
+      "selection_reason": "cohort_index_0030",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0001789434179036642,
+          "p2": 8.452688545084863e-05,
+          "p3": 0.003171846463631786,
+          "p4": 0.9965646832330136,
+          "p_presence": 0.9997365296966454
+        },
+        "focal_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.000485466473973191,
+          "p2": 0.00029445030072732556,
+          "p3": 0.0046059776624660575,
+          "p4": 0.9946141055628334,
+          "p_presence": 0.9992200832252994
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9871977620053732,
+          "p2": 0.004034451689269349,
+          "p3": 0.007537348058933062,
+          "p4": 0.0012304382464243763,
+          "p_presence": 0.008767786305357439
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0036304037356228707,
+          "p2": 0.0019432150896301762,
+          "p3": 0.1060959490102982,
+          "p4": 0.8883304321644487,
+          "p_presence": 0.9944263811747469
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9876343080264295,
+          "p2": 0.0051826294684999465,
+          "p3": 0.005872688565049263,
+          "p4": 0.0013103739400212944,
+          "p_presence": 0.007183062505070557
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_022",
+      "selection_reason": "cohort_index_0031",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9833198273126185,
+          "p2": 0.012378166927887692,
+          "p3": 0.0021510028797469254,
+          "p4": 0.0021510028797469254,
+          "p_presence": 0.004302005759493851
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996946173646313,
+          "p2": 0.0002165247690521745,
+          "p3": 6.603632356005488e-05,
+          "p4": 2.2821542756535957e-05,
+          "p_presence": 8.885786631659083e-05
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9997510664043692,
+          "p2": 0.00020341773639816405,
+          "p3": 3.762849764490739e-05,
+          "p4": 7.887361587760855e-06,
+          "p_presence": 4.5515859232668245e-05
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9983347539562379,
+          "p2": 0.001500935820291547,
+          "p3": 0.0001311502478215735,
+          "p4": 3.315997564889898e-05,
+          "p_presence": 0.00016431022347047246
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9992994907137461,
+          "p2": 0.0006262877359760589,
+          "p3": 6.201088335545374e-05,
+          "p4": 1.221066692241427e-05,
+          "p_presence": 7.422155027786801e-05
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_023",
+      "selection_reason": "cohort_index_0032",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.00015777536866996703,
+          "p2": 0.00010186743428838162,
+          "p3": 0.004069080388558902,
+          "p4": 0.9956712768084828,
+          "p_presence": 0.9997403571970417
+        },
+        "focal_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0007970611602529165,
+          "p2": 0.0001670730954448773,
+          "p3": 0.008569215043988424,
+          "p4": 0.9904666507003137,
+          "p_presence": 0.9990358657443021
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.994286759626737,
+          "p2": 0.002464590310129972,
+          "p3": 0.0027927466973672677,
+          "p4": 0.0004559033657658195,
+          "p_presence": 0.0032486500631330874
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.07090304735861658,
+          "p2": 0.0027492094941854277,
+          "p3": 0.06257171967778802,
+          "p4": 0.86377602346941,
+          "p_presence": 0.926347743147198
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9846907573498438,
+          "p2": 0.002765793430214266,
+          "p3": 0.008519243524372779,
+          "p4": 0.0040242056955691816,
+          "p_presence": 0.01254344921994196
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_024",
+      "selection_reason": "cohort_index_0033",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0011621080931024314,
+          "p2": 0.0004275156758713329,
+          "p3": 0.00590167186327243,
+          "p4": 0.9925087043677538,
+          "p_presence": 0.9984103762310262
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9975144711083623,
+          "p2": 0.0014997025941044073,
+          "p3": 0.000708409344513856,
+          "p4": 0.00027741695301930594,
+          "p_presence": 0.000985826297533162
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9995559390043532,
+          "p2": 9.024846006580184e-05,
+          "p3": 0.00023045751623044461,
+          "p4": 0.00012335501935044617,
+          "p_presence": 0.0003538125355808908
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.25585989911511514,
+          "p2": 0.003220800420246529,
+          "p3": 0.19926388978742232,
+          "p4": 0.541655410677216,
+          "p_presence": 0.7409193004646384
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 3,
+          "p1": 0.12974245208857713,
+          "p2": 0.004439542575612594,
+          "p3": 0.5131414134013893,
+          "p4": 0.352676591934421,
+          "p_presence": 0.8658180053358103
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_025",
+      "selection_reason": "cohort_index_0034",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 4,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0003335641713867148,
+          "p2": 0.0001082924312630404,
+          "p3": 0.00521781905470603,
+          "p4": 0.9943403243426442,
+          "p_presence": 0.9995581433973502
+        },
+        "focal_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.000800704201515695,
+          "p2": 0.0001391415266347222,
+          "p3": 0.004066311460127381,
+          "p4": 0.9949938428117222,
+          "p_presence": 0.9990601542718496
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9962877329300925,
+          "p2": 0.000908496709764625,
+          "p3": 0.002179370311704756,
+          "p4": 0.0006244000484381003,
+          "p_presence": 0.002803770360142856
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9844832116568668,
+          "p2": 0.009651533633845449,
+          "p3": 0.004559061671283534,
+          "p4": 0.0013061930380041675,
+          "p_presence": 0.005865254709287701
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9994987000095289,
+          "p2": 0.00016859665173086868,
+          "p3": 0.00023044430034061612,
+          "p4": 0.00010225903839966487,
+          "p_presence": 0.000332703338740281
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_026",
+      "selection_reason": "cohort_index_0035",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.00048387972677160627,
+          "p2": 0.0005836703635134706,
+          "p3": 0.00756915244210979,
+          "p4": 0.9913632974676051,
+          "p_presence": 0.9989324499097149
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9974442928980869,
+          "p2": 0.0013233893078743407,
+          "p3": 0.0008026761899616692,
+          "p4": 0.0004296416040770634,
+          "p_presence": 0.0012323177940387327
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9978422137960997,
+          "p2": 0.000968598739634013,
+          "p3": 0.0010310679912552293,
+          "p4": 0.00015811947301103485,
+          "p_presence": 0.001189187464266264
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9923834151736161,
+          "p2": 0.0021708295547410482,
+          "p3": 0.004595646203450083,
+          "p4": 0.0008501090681928845,
+          "p_presence": 0.005445755271642968
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.013772168996579872,
+          "p2": 0.0006856759194064983,
+          "p3": 0.020038392428219164,
+          "p4": 0.9655037626557945,
+          "p_presence": 0.9855421550840137
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_027",
+      "selection_reason": "cohort_index_0036",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 3,
+        "generalized_non_epileptiform_activity": 3
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0006962920927128993,
+          "p2": 0.00089405674448206,
+          "p3": 0.01795760975271938,
+          "p4": 0.9804520414100857,
+          "p_presence": 0.9984096511628051
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9973192920234009,
+          "p2": 0.0016990532438681475,
+          "p3": 0.0008025759237294355,
+          "p4": 0.0001790788090015722,
+          "p_presence": 0.0009816547327310078
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9968480357057995,
+          "p2": 0.0012424662918917512,
+          "p3": 0.0013225984831109888,
+          "p4": 0.0005868995191978179,
+          "p_presence": 0.0019094980023088067
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.5521798569194747,
+          "p2": 0.010113525655343725,
+          "p3": 0.37950729562508795,
+          "p4": 0.05819932180009361,
+          "p_presence": 0.4377066174251816
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0031321165474365188,
+          "p2": 0.00039820393288689856,
+          "p3": 0.012387761250240537,
+          "p4": 0.984081918269436,
+          "p_presence": 0.9964696795196766
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_028",
+      "selection_reason": "cohort_index_0037",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 2,
+          "p1": 0.46595393611578817,
+          "p2": 0.5279949819100043,
+          "p3": 0.004568052469093911,
+          "p4": 0.0014830295051137398,
+          "p_presence": 0.00605108197420765
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9962727515777217,
+          "p2": 0.00317091773972507,
+          "p3": 0.00048627598484353354,
+          "p4": 7.005469770972228e-05,
+          "p_presence": 0.0005563306825532558
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9990327649850129,
+          "p2": 0.0006261205750304038,
+          "p3": 0.0002957584176273337,
+          "p4": 4.535602232934826e-05,
+          "p_presence": 0.000341114439956682
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.996337878448548,
+          "p2": 0.0027985083973666295,
+          "p3": 0.0008017860798990624,
+          "p4": 6.182707418621753e-05,
+          "p_presence": 0.00086361315408528
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9991077116587257,
+          "p2": 0.0005525908241919124,
+          "p3": 0.00021639777919000016,
+          "p4": 0.00012329973789237684,
+          "p_presence": 0.000339697517082377
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_029",
+      "selection_reason": "cohort_index_0038",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0005499649703217831,
+          "p2": 0.00048534238283900257,
+          "p3": 0.004604800318565244,
+          "p4": 0.9943598923282739,
+          "p_presence": 0.9989646926468392
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9982447599316706,
+          "p2": 0.0008033203707838366,
+          "p3": 0.0008033203707838366,
+          "p4": 0.00014859932676164884,
+          "p_presence": 0.0009519196975454854
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9996326693609714,
+          "p2": 8.478706177963763e-05,
+          "p3": 0.0002165113471406127,
+          "p4": 6.603223010830536e-05,
+          "p_presence": 0.00028254357724891805
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.006409378072591536,
+          "p2": 0.0005600452145013288,
+          "p3": 0.04179440504974093,
+          "p4": 0.9512361716631662,
+          "p_presence": 0.9930305767129072
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0320849422487013,
+          "p2": 0.0005876563561012805,
+          "p3": 0.23707743820660404,
+          "p4": 0.7302499631885935,
+          "p_presence": 0.9673274013951976
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_030",
+      "selection_reason": "cohort_index_0039",
+      "ld_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 1,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 1,
+          "p1": 0.9730746134710919,
+          "p2": 0.025931562263485967,
+          "p3": 0.0007830651417129105,
+          "p4": 0.0002107591237091308,
+          "p_presence": 0.0009938242654220413
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.999081398751767,
+          "p2": 0.0005525763903286881,
+          "p3": 0.00029577268701775955,
+          "p4": 7.025217088652283e-05,
+          "p_presence": 0.0003660248579042824
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9979356836597912,
+          "p2": 0.0006657698857983524,
+          "p3": 0.0011684625385343244,
+          "p4": 0.00023008391587613897,
+          "p_presence": 0.0013985464544104633
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9990973274728273,
+          "p2": 0.0004876546885541375,
+          "p3": 0.00035677579167531405,
+          "p4": 5.824204694320335e-05,
+          "p_presence": 0.0004150178386185174
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9994585930545676,
+          "p2": 0.00021647377331521583,
+          "p3": 0.00024529692136167564,
+          "p4": 7.963625075547507e-05,
+          "p_presence": 0.00032493317211715073
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_031",
+      "selection_reason": "cohort_index_0040",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 3
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.00042819200047874685,
+          "p2": 0.0002764616659644778,
+          "p3": 0.005216446459853872,
+          "p4": 0.9940788998737029,
+          "p_presence": 0.9992953463335568
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9966486772905213,
+          "p2": 0.0019239842899760678,
+          "p3": 0.001166955460675927,
+          "p4": 0.00026038295882670426,
+          "p_presence": 0.0014273384195026312
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9991359765482649,
+          "p2": 0.00023036056556397625,
+          "p3": 0.00043037040058324893,
+          "p4": 0.00020329248558784464,
+          "p_presence": 0.0006336628861710935
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 3,
+          "p1": 0.06696402574918825,
+          "p2": 0.0015748429390646595,
+          "p3": 0.49480088388612326,
+          "p4": 0.4366602474256238,
+          "p_presence": 0.9314611313117471
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.026784731099868047,
+          "p2": 0.016245760624228455,
+          "p3": 0.4189837386589532,
+          "p4": 0.5379857696169502,
+          "p_presence": 0.9569695082759034
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_032",
+      "selection_reason": "cohort_index_0041",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.00044872321191897693,
+          "p2": 0.0006133319111362276,
+          "p3": 0.020310758595501903,
+          "p4": 0.978627186281443,
+          "p_presence": 0.9989379448769449
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9956224144464471,
+          "p2": 0.0027964984628455385,
+          "p3": 0.0013209723386398938,
+          "p4": 0.0002601147520675746,
+          "p_presence": 0.0015810870907074683
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9987952259219698,
+          "p2": 0.00035666795753193527,
+          "p3": 0.0005524181391774136,
+          "p4": 0.00029568798132085443,
+          "p_presence": 0.000848106120498268
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.008674662478678317,
+          "p2": 0.0008068692995291716,
+          "p3": 0.10567899806180006,
+          "p4": 0.8848394701599924,
+          "p_presence": 0.9905184682217925
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9117427055999805,
+          "p2": 0.018922616447872104,
+          "p3": 0.066046421055582,
+          "p4": 0.0032882568965653595,
+          "p_presence": 0.06933467795214736
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_033",
+      "selection_reason": "cohort_index_0042",
+      "ld_labels": {
+        "abnormality": 3,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 3
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 4,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0004271349022307087,
+          "p2": 0.0003769452282043744,
+          "p3": 0.007571147299118363,
+          "p4": 0.9916247725704466,
+          "p_presence": 0.9991959198695649
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9973138053991003,
+          "p2": 0.0014994007919039967,
+          "p3": 0.0009094325514871762,
+          "p4": 0.00027736125750852194,
+          "p_presence": 0.0011867938089956981
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9988045619977758,
+          "p2": 0.00040416147353128926,
+          "p3": 0.0005880514741074673,
+          "p4": 0.00020322505458551825,
+          "p_presence": 0.0007912765286929855
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9721599891530279,
+          "p2": 0.006550361956901587,
+          "p3": 0.013867116371579691,
+          "p4": 0.007422532518490822,
+          "p_presence": 0.02128964889007051
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.010620077020284526,
+          "p2": 0.0006789188097572937,
+          "p3": 0.0327121401746876,
+          "p4": 0.9559888639952706,
+          "p_presence": 0.9887010041699582
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_034",
+      "selection_reason": "cohort_index_0043",
+      "ld_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 4,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "sg_labels": {
+        "abnormality": 4,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 1,
+        "generalized_non_epileptiform_activity": 4
+      },
+      "model": {
+        "abnormality": {
+          "pred": 4,
+          "p1": 0.0003790133174952899,
+          "p2": 8.456930223111172e-05,
+          "p3": 0.002471477287583034,
+          "p4": 0.9970649400926905,
+          "p_presence": 0.9995364173802735
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9654524806557208,
+          "p2": 0.007371321944273154,
+          "p3": 0.02270526463819181,
+          "p4": 0.004470932761814208,
+          "p_presence": 0.02717619740000602
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 4,
+          "p1": 0.0011653899039427752,
+          "p2": 0.00035542383953238307,
+          "p3": 0.0031678581989572786,
+          "p4": 0.9953113280575676,
+          "p_presence": 0.9984791862565249
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9952431091169694,
+          "p2": 0.0021770852984068054,
+          "p3": 0.0021770852984068054,
+          "p4": 0.00040272028621690214,
+          "p_presence": 0.0025798055846237076
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9746344411185358,
+          "p2": 0.002269507053916368,
+          "p3": 0.012268839218719485,
+          "p4": 0.010827212608828353,
+          "p_presence": 0.02309605182754784
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    },
+    {
+      "case_id": "case_035",
+      "selection_reason": "cohort_index_0044",
+      "ld_labels": {
+        "abnormality": 2,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 2,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "sg_labels": {
+        "abnormality": 2,
+        "focal_epileptiform_activity": 1,
+        "generalized_epileptiform_activity": 1,
+        "focal_non_epileptiform_activity": 2,
+        "generalized_non_epileptiform_activity": 1
+      },
+      "model": {
+        "abnormality": {
+          "pred": 2,
+          "p1": 0.03306218451590483,
+          "p2": 0.966218731109812,
+          "p3": 0.0005344005679067781,
+          "p4": 0.00018468380637634362,
+          "p_presence": 0.0007190843742831217
+        },
+        "focal_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9945573230701298,
+          "p2": 0.0046057137464975495,
+          "p3": 0.000706309078891363,
+          "p4": 0.00013065410448127998,
+          "p_presence": 0.000836963183372643
+        },
+        "generalized_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9995452564875503,
+          "p2": 0.0002959102137099499,
+          "p3": 0.00013130936135930776,
+          "p4": 2.752393738044926e-05,
+          "p_presence": 0.00015883329873975701
+        },
+        "focal_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9946009361410382,
+          "p2": 0.00316559613472365,
+          "p3": 0.0019200311119776982,
+          "p4": 0.00031343661226053074,
+          "p_presence": 0.0022334677242382287
+        },
+        "generalized_non_epileptiform_activity": {
+          "pred": 1,
+          "p1": 0.9993968658196815,
+          "p2": 0.0003352601496183317,
+          "p3": 0.00021646022157107046,
+          "p4": 5.1413809129145016e-05,
+          "p_presence": 0.00026787403070021546
+        }
+      },
+      "joint_output_consistent": true,
+      "attempts_used": 1
+    }
+  ],
+  "summary_vs_ld": {
+    "abnormality": {
+      "n": 33,
+      "exact_matches": 25,
+      "binary_matches": 32
+    },
+    "focal_epileptiform_activity": {
+      "n": 33,
+      "exact_matches": 31,
+      "binary_matches": 32
+    },
+    "generalized_epileptiform_activity": {
+      "n": 33,
+      "exact_matches": 33,
+      "binary_matches": 33
+    },
+    "focal_non_epileptiform_activity": {
+      "n": 33,
+      "exact_matches": 25,
+      "binary_matches": 29
+    },
+    "generalized_non_epileptiform_activity": {
+      "n": 33,
+      "exact_matches": 24,
+      "binary_matches": 30
+    }
+  }
+}

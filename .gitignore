@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+third_party/
+/scratch/
+reference/
+archive/
+results/*.log
+logs/
+*.egg-info/
+build/
