@@ -26,8 +26,8 @@ directions — both grammar-enforced (`ENFORCE_CONSISTENCY=1`), tagged `…g`:
 ## Slurm jobs (MedGemma-27B, CPU, temp 0, ctx 8192, ENFORCE_CONSISTENCY=1)
 | Variant | Zoe Q2 | Maria Q2 | Zoe Q4 | Maria Q4 |
 |---|---|---|---|---|
-| v7g | TBD | TBD | TBD | TBD |
-| v8g | TBD | TBD | TBD | TBD |
+| v7g | 53567781 | 53567782 | 53567783 | 53567784 |
+| v8g | 53567785 | 53567786 | 53567787 | 53567788 |
 
 ## Reproduce
 ```bash
