@@ -408,6 +408,55 @@ EEG report to classify:
 """.strip()
 
 
+# v9 = reasoning-first ("let the model decide"). Instead of prescribing exclusion lists,
+# it gives MedGemma a concise expert frame + the two decision questions, and asks it to
+# reason briefly in a "reasoning" field before committing the labels. Run with
+# REASONING=1 and ENFORCE_CONSISTENCY=1 (the grammar adds the leading reasoning string
+# and still guarantees consistency; needs a larger MAX_TOKENS). This tests whether the
+# model's own clinical judgment, given room to deliberate, matches the hand-written rules.
+PROMPT_PREFIX_V9 = r"""
+You are a neurologist annotating a routine clinical EEG report. Use your clinical judgement; rely on the Impression as the primary source and the Description or Findings when it is unclear. Do not infer anything the report does not support.
+
+Assign five labels, each 1-4 (1 confident no/normal, 2 low-confidence no/normal, 3 low-confidence yes/abnormal, 4 confident yes/abnormal):
+- overall_abnormal — is the EEG abnormal at all
+- focal_epileptiform, generalized_epileptiform — epileptiform discharges (spikes, sharp waves, epileptiform/periodic discharges, electrographic seizures), focal (localized/one region/multifocal) vs generalized (bilaterally synchronous/diffuse)
+- focal_nonepileptiform, generalized_nonepileptiform — non-epileptiform disturbance (slowing, attenuation, dysfunction), focal (localized) vs generalized (diffuse)
+
+For each abnormality the report describes, decide two things using your judgement:
+1. Is it epileptiform (discharges) or non-epileptiform (slowing/attenuation)? Sharply-contoured waveforms, benign variants, and artifacts are not epileptiform unless the report says so.
+2. Is it focal (localized) or generalized (diffuse)?
+
+First think it through in a short "reasoning" field: name each finding the report describes and classify its nature and distribution. Then output the five labels consistent with your reasoning.
+
+Return only one JSON object with a "reasoning" string followed by the five integer keys: overall_abnormal, focal_epileptiform, generalized_epileptiform, focal_nonepileptiform, generalized_nonepileptiform.
+
+EEG report to classify:
+""".strip()
+
+
+# v10 = a targeted improvement of our best prompt (v5). v5's residual weakness is
+# precision — the model still over-calls (its systematic bias), which caps the slowing
+# and epileptiform categories below the human. v10 adds a general *evidence-calibration*
+# rule: tie each score to how explicitly the report supports that specific subtype, and
+# require explicit textual support before marking a subtype present. This is a judgement
+# principle (evidence strength -> confidence), not an annotator-specific exclusion list.
+_V10_CALIBRATION = r"""
+Evidence calibration (apply to every subtype before scoring):
+
+Tie each score to how explicitly the report supports that specific finding, not to how abnormal the overall study sounds:
+- 4 — the report clearly and directly states the finding is present;
+- 3 — the report suggests it with hedged wording (possible, probable, questionable, suspicious, cannot exclude, may represent) or the Impression and body only partly agree;
+- 2 — the finding is probably absent but the study is limited or the wording leaves doubt;
+- 1 — the report gives no evidence for it, or explicitly denies it.
+
+Do not mark a subtype present (3 or 4) without explicit textual support for that specific subtype. When the evidence for a subtype is genuinely balanced between present and absent, prefer absent (2).
+""".strip()
+
+PROMPT_PREFIX_V10 = PROMPT_PREFIX_V5.replace(
+    "Output requirements:",
+    _V10_CALIBRATION + "\n\nOutput requirements:", 1)
+
+
 OUTPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -436,6 +485,8 @@ def build_prompt(report_text: str) -> str:
         "v6": PROMPT_PREFIX_V6,
         "v7": PROMPT_PREFIX_V7,
         "v8": PROMPT_PREFIX_V8,
+        "v9": PROMPT_PREFIX_V9,
+        "v10": PROMPT_PREFIX_V10,
     }.get(PROMPT_VARIANT, PROMPT_PREFIX)
     return prefix + "\n\n" + report_text
 
@@ -448,6 +499,12 @@ def build_prompt(report_text: str) -> str:
 # and the "subtype present but EEG normal" contradiction cannot occur. Parsing is by
 # JSON key name (see cpu/evaluator.find_field_token), so reordering keys is safe.
 ENFORCE_CONSISTENCY = os.environ.get("ENFORCE_CONSISTENCY", "").lower() in {"1", "true", "yes"}
+# REASONING adds a free-text "reasoning" JSON string field BEFORE the five labels, so
+# the model can deliberate (name each finding, its type and distribution) and the label
+# tokens are generated conditioned on that reasoning. Labels still grammar-constrained;
+# with ENFORCE_CONSISTENCY they still satisfy the consistency rule. Needs a larger
+# max-tokens (the reasoning consumes tokens). Used by the reasoning-first prompt (v9).
+REASONING = os.environ.get("REASONING", "").lower() in {"1", "true", "yes"}
 
 
 def build_grammar() -> str:
@@ -462,25 +519,30 @@ def build_grammar() -> str:
     bidirectional consistency rule: overall_abnormal is high (3/4) iff at least one
     subtype is high. Subtypes are placed first and overall_abnormal last.
     """
+    sep = ' "," ws '
+    # optional leading reasoning string field
+    pre = ('"\\"reasoning\\":" ws jstr' + sep) if REASONING else ""
+    jstr_rule = 'jstr ::= "\\"" ( [^"\\\\] | "\\\\" . )* "\\""\n' if REASONING else ""
+
     if not ENFORCE_CONSISTENCY:
-        pairs = " \",\" ws ".join(
+        pairs = sep.join(
             f'"\\"{field}\\":" ws num' for field in OUTPUT_FIELDS
         )
         return (
-            f'root ::= "{{" ws {pairs} ws "}}"\n'
+            f'root ::= "{{" ws {pre}{pairs} ws "}}"\n'
             "num ::= [1-4]\n"
-            "ws ::= [ \\t\\n]*\n"
+            + jstr_rule
+            + "ws ::= [ \\t\\n]*\n"
         )
 
     subs = [f for f in OUTPUT_FIELDS if f != "overall_abnormal"]  # the four subtypes
-    sep = ' "," ws '
 
     def kv(field: str, valrule: str) -> str:
         return f'"\\"{field}\\":" ws {valrule}'
 
     # normal branch: every subtype low (1-2) -> overall_abnormal low (1-2)
     normal_body = sep.join(kv(s, "low") for s in subs)
-    normal = f'"{{" ws {normal_body}{sep}{kv("overall_abnormal", "low")} ws "}}"'
+    normal = f'"{{" ws {pre}{normal_body}{sep}{kv("overall_abnormal", "low")} ws "}}"'
 
     # abnormal branches: at least one subtype high, enumerated by first-high position
     # -> overall_abnormal high (3-4)
@@ -489,7 +551,7 @@ def build_grammar() -> str:
         vals = ["low"] * i + ["high"] + ["anyv"] * (len(subs) - i - 1)
         body = sep.join(kv(s, v) for s, v in zip(subs, vals))
         abnormal.append(
-            f'"{{" ws {body}{sep}{kv("overall_abnormal", "high")} ws "}}"')
+            f'"{{" ws {pre}{body}{sep}{kv("overall_abnormal", "high")} ws "}}"')
 
     root = "root ::= " + normal + " | " + " | ".join(abnormal) + "\n"
     return (
@@ -497,6 +559,7 @@ def build_grammar() -> str:
         + "low ::= [1-2]\n"
         + "high ::= [3-4]\n"
         + "anyv ::= [1-4]\n"
+        + jstr_rule
         + "ws ::= [ \\t\\n]*\n"
     )
 

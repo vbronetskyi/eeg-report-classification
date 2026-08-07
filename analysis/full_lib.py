@@ -64,6 +64,16 @@ RESULTS = {
     ("maria", "v8g", "Q2"): "maria_v8g_cpu_q2_k_full_n499",
     ("zoe", "v8g", "Q4"): "zoe_v8g_cpu_q4_k_s_full_n1495",
     ("maria", "v8g", "Q4"): "maria_v8g_cpu_q4_k_s_full_n499",
+    # v9g = reasoning-first ("let the model decide"), grammar-enforced + REASONING
+    ("zoe", "v9g", "Q2"): "zoe_v9g_cpu_q2_k_full_n1495",
+    ("maria", "v9g", "Q2"): "maria_v9g_cpu_q2_k_full_n499",
+    ("zoe", "v9g", "Q4"): "zoe_v9g_cpu_q4_k_s_full_n1495",
+    ("maria", "v9g", "Q4"): "maria_v9g_cpu_q4_k_s_full_n499",
+    # v10g = v5 + evidence-calibration (precision), grammar-enforced
+    ("zoe", "v10g", "Q2"): "zoe_v10g_cpu_q2_k_full_n1495",
+    ("maria", "v10g", "Q2"): "maria_v10g_cpu_q2_k_full_n499",
+    ("zoe", "v10g", "Q4"): "zoe_v10g_cpu_q4_k_s_full_n1495",
+    ("maria", "v10g", "Q4"): "maria_v10g_cpu_q4_k_s_full_n499",
 }
 
 # Paper Table III (Zoe / Maria) core F1 — published constants.

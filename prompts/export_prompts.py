@@ -3,7 +3,7 @@
 import os, importlib
 from pathlib import Path
 OUT = Path(__file__).resolve().parent
-for v in ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8"]:
+for v in ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]:
     os.environ["PROMPT_VARIANT"] = v
     import core.prompt as p; importlib.reload(p)
     txt = f"#### SYSTEM ####\n\n{p.SYSTEM}\n\n#### USER PROMPT ({v}) ####\n\n"

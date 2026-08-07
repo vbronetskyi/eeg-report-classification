@@ -192,7 +192,7 @@ python -m cpu.chunk \
   --chunk-size "$CHUNK_SIZE" \
   --model medgemma-q2 \
   --base-url "http://127.0.0.1:${PORT}/v1" \
-  --max-tokens 128 \
+  --max-tokens "${MAX_TOKENS:-128}" \
   --retries 2 \
   --output "$OUTPUT" \
   2>&1 | tee "$EVAL_LOG"
