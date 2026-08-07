@@ -48,7 +48,7 @@ several plausible ideas were tested and rejected.
 | v7g | v5g + body-aware abnormality | **Rejected** — did not close the Abnormality gap |
 | v8g | Deliberately simplified prompt | **Rejected** — regresses on Focal Epi (the exclusions are load-bearing) |
 | v9g | Reasoning-first ("let the model decide") | **Rejected** — 3–6 pts *worse* than v5g, and much slower |
-| v10g | v5 + evidence-calibration rule | Neutral / slightly worse than v5g (preliminary) |
+| v10g | v5 + evidence-calibration rule | **Rejected** — 86.5–86.7%, just below v5g (the "prefer absent" rule over-tightened Focal Epi) |
 
 ### The decisive lever: grammar-enforced consistency
 The schema requires that the overall label agrees with the subtypes (abnormal iff at
