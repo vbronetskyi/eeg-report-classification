@@ -10,7 +10,10 @@ grammar-constrained via llama.cpp. Benchmarked against the paper's **Mistral-7B*
 > Mistral-7B 74.5% → our best prompt **v5g 87.6%** → human ceiling 89.8%.
 > v5g **beats Mistral-7B on all five categories**, **matches or exceeds the human
 > annotator on the epileptiform categories**, and sits 2.2 points below the human
-> whole-report ceiling — from a ~10 GB Q2_K model on CPU. See `reports/`.
+> whole-report ceiling — from a ~10 GB Q2_K model on CPU.
+>
+> **Full results, the tested-and-rejected ideas, and cross-annotator validation:
+> [reports/results.md](reports/results.md).**
 
 ## Repository structure
 
