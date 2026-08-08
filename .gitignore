@@ -5,7 +5,13 @@ third_party/
 /scratch/
 reference/
 archive/
-results/*.log
 logs/
 *.egg-info/
 build/
+# results/ holds only the result JSONs — keep logs/pids/install-dumps out
+results/*.log
+results/*.err
+results/*.out
+results/*.pid
+results/*.txt
+results/h100_priority_checks/
