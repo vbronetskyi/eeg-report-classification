@@ -54,12 +54,12 @@ even the two humans disagree most.
 | Mistral-7B | 94.7 | 82.8 | 74.8 | 75.6 | 75.2 | 74.5 | — |
 | v1 | 96.8 | 80.4 | 88.5 | 88.0 | 84.0 | 83.9 | 82.9 |
 | v3 | 95.6 | 82.7 | 87.0 | 87.5 | 85.7 | 84.2 | 82.4 |
-| v3g | 95.9 | 86.4 | 89.2 | 86.9 | 89.6 | 86.5 | — |
+| v3g | 95.9 | 86.4 | 89.2 | 86.9 | 89.6 | 86.5 | 86.0 |
 | **v5g Q2** | 95.4 | **87.6** | **89.9** | 88.8 | 86.7 | **87.6** | 85.6 |
 | **v5g Q4** | 96.0 | 85.6 | 88.8 | 89.0 | 89.3 | **87.6** | **86.2** |
 | v7g | 96.2 | 86.0 | 87.8 | 87.4 | 90.0 | 87.1 | 86.1 |
 | v8g | 93.9 | 76.9 | 85.4 | 85.8 | 87.7 | 83.6 | 82.8 |
-| v10g | 95.9 | 86.4 | 88.0 | 86.9 | 89.6 | 86.7 | 86.1 |
+| v10g | 96.1 | 86.9 | 87.8 | 87.4 | 89.8 | 86.7 | 86.1 |
 | Human SG | 98.0 | 85.7 | 87.5 | 90.8 | 90.0 | 89.8 | — |
 
 (v9g omitted from the pooled table — it is much slower and did not finish the full run;
@@ -79,8 +79,8 @@ the grammar variants except where a quant is named.)
   load-bearing; removing them re-introduces over-calling.
 - **Rejected — reasoning-first (v9):** given latitude to deliberate, the model's unaided
   judgement still under-performs the explicit rules by 3–6 points.
-- **Rejected — evidence calibration (v10):** slightly over-tightened Focal Epi; ~1 point
-  below v5g.
+- **Rejected — evidence calibration (v10):** ~1 point below v5g on both quants; the
+  "prefer absent" rule slightly hurt the rare Focal Epi class on Q2.
 
 The improvement **holds against the held-out annotator SG** (82.9% → 86.2%), so it is a
 real gain, not fitting to LD; the residual gap to the human is close to the level of
