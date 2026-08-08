@@ -12,8 +12,8 @@ grammar-constrained via llama.cpp. Benchmarked against the paper's **Mistral-7B*
 > annotator on the epileptiform categories**, and sits 2.2 points below the human
 > whole-report ceiling — from a ~10 GB Q2_K model on CPU.
 >
-> **Full results, the tested-and-rejected ideas, and cross-annotator validation:
-> [reports/results.md](reports/results.md).**
+> **Full prompt-by-prompt comparison (table, charts, tested-and-rejected ideas,
+> cross-annotator validation): [reports/all_prompts.md](reports/all_prompts.md).**
 
 ## Repository structure
 
