@@ -18,7 +18,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from analysis.full_lib import (KEYS, LABELS, load, INK, INK2, GRID,
-                               BLUE, ORANGE, GREEN)
+                               BLUE, ORANGE, GREEN, VIOLET)
 
 GREY = "#8b94a4"
 
@@ -106,25 +106,28 @@ def chart_whole():
 
 
 def chart_bycat():
-    v5 = pooled("v5g", "Q2")
+    # our top grammar prompts (Q2) alongside Mistral and the human annotator.
+    v3g = pooled("v3g", "Q2"); v5g = pooled("v5g", "Q2"); v7g = pooled("v7g", "Q2")
+    # colours chosen so no adjacent pair collides (order = plot order, left→right)
     series = [
-        ("Mistral-7B", MISTRAL_F1, GREY),
-        ("MedGemma v5g", [catf1(v5, k, MODEL, LD) for k in KEYS], BLUE),
-        ("Human (SG)", [catf1(v5, k, SG, LD) for k in KEYS], GREEN),
+        ("Mistral-7B", MISTRAL_F1,                              GREY),
+        ("v5g (best)", [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
+        ("v3g",        [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
+        ("v7g",        [catf1(v7g, k, MODEL, LD) for k in KEYS], VIOLET),
+        ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
     ]
-    fig, ax = plt.subplots(figsize=(9.2, 5.0))
+    fig, ax = plt.subplots(figsize=(9.6, 5.2))
     fig.patch.set_facecolor("white"); ax.set_facecolor("white")
     import numpy as np
-    x = np.arange(len(KEYS)); off = 0.2
+    x = np.arange(len(KEYS)); off = 0.16
     from matplotlib.lines import Line2D
     for xi in x:                                   # faint per-category guide
         ax.plot([xi, xi], [70, 100], color=GRID, lw=1, zorder=0)
+    n = len(series)
     for i, (name, vals, col) in enumerate(series):
-        xs = x + (i - 1) * off
-        ax.scatter(xs, vals, s=130, color=col, zorder=3)
-        for xv, v in zip(xs, vals):
-            ax.text(xv, v + 0.9, f"{v:.0f}", ha="center", va="bottom",
-                    fontsize=8, color=col, fontweight="bold")
+        xs = x + (i - (n - 1) / 2) * off
+        ax.scatter(xs, vals, s=110, color=col, zorder=3,
+                   edgecolor="white", linewidth=0.8)
     ax.set_xticks(x); ax.set_xticklabels(LABELS, fontsize=9.5, color=INK2)
     ax.set_xlim(-0.5, len(KEYS) - 0.5)
     ax.set_ylim(72, 101); ax.set_ylabel("Core F1, %", color=INK2, fontsize=10)
@@ -134,8 +137,8 @@ def chart_bycat():
     handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
                for l, _, c in series]
     ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
-              bbox_to_anchor=(0.5, -0.18), ncol=3, handletextpad=0.3)
-    ax.set_title("Per-category F1 — MedGemma v5g vs Mistral-7B vs human  ·  n=1994",
+              bbox_to_anchor=(0.5, -0.16), ncol=5, handletextpad=0.2, columnspacing=1.1)
+    ax.set_title("Per-category F1 — our top prompts vs Mistral-7B vs human  ·  n=1994",
                  color=INK, fontsize=13, fontweight="bold", loc="left", pad=14)
     fig.tight_layout(); fig.savefig(OUT / "all_prompts_bycat.png", bbox_inches="tight",
                                     facecolor="white")

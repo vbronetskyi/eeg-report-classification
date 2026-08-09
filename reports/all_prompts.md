@@ -36,16 +36,19 @@ clears Mistral by ~10 points.** Adding grammar-enforced consistency is the big s
 The rejected ideas cluster below it: **v8 (simplified)** even falls *below* the v1
 baseline, because dropping the detailed rules brings the over-calling straight back.
 
-## How the best model compares per category
+## Our top prompts vs Mistral and human, per category
 
-![Per-category F1 vs Mistral and human](figures/all_prompts_bycat.png)
+![Per-category F1 — top prompts vs Mistral and human](figures/all_prompts_bycat.png)
 
-**What you see:** Core F1 per category for our best model **v5g**, Mistral-7B, and the
-human annotator. v5g (blue) **beats Mistral (grey) on all five** — decisively on the
-harder three (Gen Epi, Focal Non-epi, Gen Non-epi). Against the **human** (green), v5g
-**matches or exceeds** on the epileptiform categories (Focal Epi 88 vs 86, Gen Epi 90 vs
-88) and trails only on Abnormality and the slowing categories — exactly the classes where
-even the two humans disagree most.
+**What you see:** Core F1 per category for our three strongest prompts (**v5g**, **v3g**,
+**v7g**), Mistral-7B, and the human annotator. Our prompts (blue / orange / violet)
+**cluster tightly together and sit far above Mistral (grey)** on the harder three classes
+(Gen Epi, Focal Non-epi, Gen Non-epi) — the gap to Mistral is 10–15 points there. Against
+the **human (green)** the cluster lands right at the human level: **matching or beating
+it on the epileptiform categories** (Focal Epi, Gen Epi) and trailing only on Abnormality
+and the slowing classes — exactly where the two humans disagree most. That the three
+prompts land so close to each other is itself the point: the result is stable across our
+top variants, not a fluke of one prompt.
 
 ## Full numbers (pooled n=1994)
 
