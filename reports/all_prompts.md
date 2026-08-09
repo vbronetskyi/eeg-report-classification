@@ -101,6 +101,55 @@ annotator's phrasing.
 on a fair same-case comparison it was 3–6 points **below** v5g. Values shown use Q4 for
 the grammar variants except where a quant is named.)
 
+## Accuracy view — % guessed correctly (core & exact)
+
+The charts above use **F1** (the paper's metric, best for imbalanced classes). If you
+prefer plain **accuracy** (correct ÷ all), here it is, in the two levels from the dumbbell
+charts. The **All-5** column of the *core* table is exactly the whole-report % from the
+first chart (e.g. v5g = 87.6%).
+
+> Caveat: per-category accuracy looks very high on the **rare** classes (Focal Epi ~98%)
+> simply because "absent" is the right answer most of the time — that inflation is why the
+> charts use F1, which exposes the over-calling. Accuracy is most meaningful on the common
+> classes (Abnormality, Focal/Gen Non-epi) and on the **All-5** column.
+
+**Core accuracy — % present/absent correct (1–2 vs 3–4):**
+
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | All-5 |
+|---|---|---|---|---|---|---|
+| Mistral-7B | 95.0 | 98.3 | 97.3 | 86.2 | 89.7 | 74.5 |
+| v1 | 97.0 | 97.8 | 98.9 | 93.1 | 92.3 | 83.9 |
+| v3 | 95.9 | 98.2 | 98.7 | 93.1 | 93.2 | 84.2 |
+| v3g (Q4) | 96.0 | 98.6 | 98.9 | 92.2 | 94.9 | 86.5 |
+| **v5g (Q2)** | 95.6 | 98.8 | 99.0 | 93.7 | 94.0 | **87.6** |
+| **v5g (Q4)** | 96.1 | 98.5 | 98.9 | 93.5 | 94.8 | **87.6** |
+| v7g (Q4) | 96.3 | 98.6 | 98.8 | 92.5 | 95.2 | 87.1 |
+| v8g (Q4) | 93.8 | 97.3 | 98.5 | 91.2 | 93.8 | 83.6 |
+| v10g (Q4) | 96.2 | 98.7 | 98.8 | 92.5 | 95.0 | 86.7 |
+| Human (SG) | 98.0 | 98.6 | 98.9 | 94.7 | 95.3 | 89.8 |
+
+**Exact accuracy — % exact 1–4 level correct:**
+
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | All-5 |
+|---|---|---|---|---|---|---|
+| Mistral-7B | 76.2 | 71.9 | 94.9 | 64.9 | 80.5 | 40.7 |
+| v1 | 72.6 | 96.9 | 98.1 | 77.8 | 82.4 | 56.8 |
+| v3 | 74.1 | 97.3 | 97.9 | 79.6 | 83.2 | 59.1 |
+| v3g (Q4) | 82.3 | 96.8 | 98.0 | 80.9 | 85.9 | 66.8 |
+| **v5g (Q2)** | 75.6 | 97.3 | 98.2 | 82.2 | 84.7 | 66.5 |
+| **v5g (Q4)** | 81.6 | 96.9 | 97.8 | 82.6 | 86.4 | 67.9 |
+| v7g (Q4) | 83.2 | 96.5 | 97.9 | 82.4 | 87.1 | 69.9 |
+| v8g (Q4) | 74.4 | 92.1 | 97.4 | 77.7 | 84.0 | 61.1 |
+| v10g (Q4) | 81.6 | 96.7 | 98.0 | 81.4 | 86.9 | 67.5 |
+| Human (SG) | 89.3 | 97.4 | 98.5 | 79.2 | 85.5 | 65.9 |
+
+The **exact** table is where our approach separates from Mistral: on the exact confidence
+level Mistral drops sharply (Focal Epi 72%, Focal Non-epi 65%) while our grammar prompts
+hold in the 80–97% range — and on whole-report exact accuracy (All-5) v5g/v7g even edge
+past the human annotator, whose SG-vs-LD exact agreement is 65.9%.
+
+Regenerate: `python -m analysis.accuracy_tables`.
+
 ## What worked, what didn't
 
 - **Won:** the combination **v5 prompt + grammar-enforced consistency (v5g)**. The grammar
