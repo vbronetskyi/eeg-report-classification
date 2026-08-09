@@ -82,7 +82,41 @@ Q2_K for half the footprint, Q4_K_S if encephalopathy/diffuse findings matter mo
 as strong or stronger on the unseen data — so the model generalizes rather than fitting one
 annotator's phrasing.
 
+## How the metrics work (read before the tables)
+
+Every label is scored on the **1–4 scale** (1 confident-no · 2 low-no · 3 low-yes ·
+4 confident-yes). Two independent choices define each number.
+
+**1. Strictness — Core vs Exact**
+- **Core** — collapse to yes/no (1–2 = absent, 3–4 = present) and check the *side* only.
+  "3 vs 4" counts as correct (both mean present).
+- **Exact** — the exact 1–4 must match. "3 vs 4" is wrong (right direction, wrong
+  confidence). Always the harder test.
+
+**2. Scoring — Accuracy vs F1.** For one label, every report falls into four outcomes:
+TP (said present, is present), FP (said present, isn't), FN (said absent, is present),
+TN (said absent, isn't). The two scores use these differently:
+
+- **Accuracy** = (TP + TN) / all — counts everything, *including the easy true-negatives*.
+- **F1** = 2·TP / (2·TP + FP + FN) — *ignores TN*; measures only how well the positive
+  ("present") class is caught, balancing precision and recall.
+
+The gap between them comes entirely from TN. On a **rare** class (Focal/Gen Epi ~5%
+present) there are ~1900 easy TN, so accuracy is inflated (~98%) while F1 stays honest
+(~80%). On a **balanced** class (Abnormality ~50/50) TN doesn't dominate, so the two
+nearly coincide (~95%). **This is why the charts use F1** — it doesn't reward the trivial
+"say absent" on rare findings.
+
+**Whole-report (All-5)** = the share of reports where *all five* labels are correct — one
+intuitive number (this is what the first chart and the "All-5" column show).
+
+*The charts use Core F1 (and Certainty F1 for the exact level); the whole-report chart
+uses All-5 accuracy. The tables below give both F1 and the plain "% correct" (accuracy).*
+
 ## Full numbers (pooled n=1994)
+
+Per-category values are **Core F1**; "Whole" is **All-5 accuracy** (share of reports with
+all five labels correct), vs LD and vs the held-out annotator SG.
 
 | Prompt | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole vs LD | Whole vs SG |
 |---|---|---|---|---|---|---|---|
