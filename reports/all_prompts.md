@@ -40,8 +40,11 @@ baseline, because dropping the detailed rules brings the over-calling straight b
 
 ![Per-category F1 — top prompts vs Mistral and human](figures/all_prompts_bycat.png)
 
-**What you see:** Core F1 per category for our three strongest prompts (**v5g**, **v3g**,
-**v7g**), Mistral-7B, and the human annotator. Our prompts (blue / orange / violet)
+**What you see:** Core F1 for **each label scored on its own**, for our three strongest
+prompts (**v5g**, **v3g**, **v7g**), Mistral-7B, and the human annotator. Note these are a
+*different metric* from the first chart: the first chart's 87.6% is the share of reports
+with **all five** labels correct at once; here each number is the F1 of **one** label —
+so the two are not meant to match. Our prompts (blue / orange / violet)
 **cluster tightly together and sit far above Mistral (grey)** on the harder three classes
 (Gen Epi, Focal Non-epi, Gen Non-epi) — the gap to Mistral is 10–15 points there. Against
 the **human (green)** the cluster lands right at the human level: **matching or beating

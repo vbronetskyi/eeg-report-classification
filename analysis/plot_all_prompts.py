@@ -106,8 +106,9 @@ def chart_whole():
 
 
 def chart_bycat():
-    # Horizontal Cleveland dot plot: one row per category, a faint span line, and each
-    # model as a coloured dot — easier to read than clustered vertical groups.
+    # Horizontal grouped dot plot: one BAND per category, the 5 models stacked on their
+    # own sub-rows inside the band so every dot carries a value label. Each number is the
+    # per-label Core F1 (0-100) — a single-label quality score, NOT the whole-report %.
     from matplotlib.lines import Line2D
     v3g = pooled("v3g", "Q2"); v5g = pooled("v5g", "Q2"); v7g = pooled("v7g", "Q2")
     series = [
@@ -117,28 +118,37 @@ def chart_bycat():
         ("v5g (best)", [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
         ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
     ]
-    fig, ax = plt.subplots(figsize=(9.4, 5.0))
+    n = len(series); step = 0.9 / n
+    fig, ax = plt.subplots(figsize=(9.4, 7.2))
     fig.patch.set_facecolor("white"); ax.set_facecolor("white")
-    y = list(range(len(KEYS)))[::-1]               # first category on top
-    for ci, yi in enumerate(y):
-        vals = [s[1][ci] for s in series]
-        ax.plot([min(vals), max(vals)], [yi, yi], color=GRID, lw=6,
-                solid_capstyle="round", zorder=1)  # faint span
-        for name, v, col in series:
-            ax.scatter([v[ci]], [yi], s=150, color=col, zorder=3,
-                       edgecolor="white", linewidth=1.2)
-    ax.set_yticks(y); ax.set_yticklabels(LABELS, fontsize=11, color=INK)
-    ax.set_ylim(-0.6, len(KEYS) - 0.4)
-    ax.set_xlim(72, 101); ax.set_xlabel("Core F1, %", color=INK2, fontsize=10)
+    ticks = []
+    for ci, lab in enumerate(LABELS):
+        base = (len(KEYS) - 1 - ci) * 1.2          # category band centre
+        ticks.append((base, lab))
+        ax.axhline(base, color=GRID, lw=1, zorder=0)
+        for i, (name, vals, col) in enumerate(series):
+            yy = base + (i - (n - 1) / 2) * step
+            ax.scatter([vals[ci]], [yy], s=120, color=col, zorder=3,
+                       edgecolor="white", linewidth=1)
+            ax.text(vals[ci] + 0.4, yy, f"{vals[ci]:.0f}", va="center", ha="left",
+                    color=col, fontsize=8, fontweight="bold")
+    ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks],
+                                                             fontsize=11.5, color=INK)
+    ax.set_ylim(-0.8, (len(KEYS) - 1) * 1.2 + 0.8)
+    ax.set_xlim(72, 102); ax.set_xlabel("Per-label Core F1, %", color=INK2, fontsize=10)
     ax.grid(axis="x", color=GRID, lw=1, zorder=0)
     ax.tick_params(axis="x", colors=INK2, labelsize=9)
     _bare(ax)
     handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
                for l, _, c in series]
     ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
-              bbox_to_anchor=(0.5, -0.16), ncol=5, handletextpad=0.2, columnspacing=1.1)
-    ax.set_title("Per-category F1 — our top prompts vs Mistral-7B vs human  ·  n=1994",
-                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=14)
+              bbox_to_anchor=(0.5, -0.11), ncol=5, handletextpad=0.2, columnspacing=1.1)
+    ax.set_title("Per-category F1 — our top prompts vs Mistral-7B vs human",
+                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=30)
+    ax.text(0, 1.045,
+            "each label scored on its own (F1, 0–100) · NOT the whole-report % — "
+            "different metric · pooled n=1994",
+            transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
     fig.tight_layout(); fig.savefig(OUT / "all_prompts_bycat.png", bbox_inches="tight",
                                     facecolor="white")
     plt.close(fig); print("saved all_prompts_bycat.png")
