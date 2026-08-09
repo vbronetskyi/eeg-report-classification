@@ -106,34 +106,33 @@ def chart_whole():
 
 
 def chart_bycat():
-    # our top grammar prompts (Q2) alongside Mistral and the human annotator.
+    # Horizontal Cleveland dot plot: one row per category, a faint span line, and each
+    # model as a coloured dot — easier to read than clustered vertical groups.
+    from matplotlib.lines import Line2D
     v3g = pooled("v3g", "Q2"); v5g = pooled("v5g", "Q2"); v7g = pooled("v7g", "Q2")
-    # colours chosen so no adjacent pair collides (order = plot order, left→right)
     series = [
         ("Mistral-7B", MISTRAL_F1,                              GREY),
-        ("v5g (best)", [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
         ("v3g",        [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
         ("v7g",        [catf1(v7g, k, MODEL, LD) for k in KEYS], VIOLET),
+        ("v5g (best)", [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
         ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
     ]
-    fig, ax = plt.subplots(figsize=(9.6, 5.2))
+    fig, ax = plt.subplots(figsize=(9.4, 5.0))
     fig.patch.set_facecolor("white"); ax.set_facecolor("white")
-    import numpy as np
-    x = np.arange(len(KEYS)); off = 0.16
-    from matplotlib.lines import Line2D
-    for xi in x:                                   # faint per-category guide
-        ax.plot([xi, xi], [70, 100], color=GRID, lw=1, zorder=0)
-    n = len(series)
-    for i, (name, vals, col) in enumerate(series):
-        xs = x + (i - (n - 1) / 2) * off
-        ax.scatter(xs, vals, s=110, color=col, zorder=3,
-                   edgecolor="white", linewidth=0.8)
-    ax.set_xticks(x); ax.set_xticklabels(LABELS, fontsize=9.5, color=INK2)
-    ax.set_xlim(-0.5, len(KEYS) - 0.5)
-    ax.set_ylim(72, 101); ax.set_ylabel("Core F1, %", color=INK2, fontsize=10)
-    ax.grid(axis="y", color=GRID, lw=1, zorder=0)
-    ax.tick_params(axis="y", colors=INK2, labelsize=9)
-    _bare(ax); ax.spines["left"].set_visible(False)
+    y = list(range(len(KEYS)))[::-1]               # first category on top
+    for ci, yi in enumerate(y):
+        vals = [s[1][ci] for s in series]
+        ax.plot([min(vals), max(vals)], [yi, yi], color=GRID, lw=6,
+                solid_capstyle="round", zorder=1)  # faint span
+        for name, v, col in series:
+            ax.scatter([v[ci]], [yi], s=150, color=col, zorder=3,
+                       edgecolor="white", linewidth=1.2)
+    ax.set_yticks(y); ax.set_yticklabels(LABELS, fontsize=11, color=INK)
+    ax.set_ylim(-0.6, len(KEYS) - 0.4)
+    ax.set_xlim(72, 101); ax.set_xlabel("Core F1, %", color=INK2, fontsize=10)
+    ax.grid(axis="x", color=GRID, lw=1, zorder=0)
+    ax.tick_params(axis="x", colors=INK2, labelsize=9)
+    _bare(ax)
     handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
                for l, _, c in series]
     ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
@@ -145,6 +144,76 @@ def chart_bycat():
     plt.close(fig); print("saved all_prompts_bycat.png")
 
 
+def _grouped2(series, title, out, ylabel="Core F1, %", ylim=(72, 101)):
+    """Two-series grouped dot plot over the 5 categories, with value labels."""
+    from matplotlib.lines import Line2D
+    import numpy as np
+    fig, ax = plt.subplots(figsize=(9.2, 4.8))
+    fig.patch.set_facecolor("white"); ax.set_facecolor("white")
+    x = np.arange(len(KEYS)); off = 0.16
+    for xi in x:
+        ax.plot([xi, xi], list(ylim), color=GRID, lw=1, zorder=0)
+    for i, (name, vals, col) in enumerate(series):
+        xs = x + (i - 0.5) * off
+        ax.scatter(xs, vals, s=130, color=col, zorder=3, edgecolor="white", linewidth=1)
+        for xv, v in zip(xs, vals):
+            ax.text(xv, v + 0.7, f"{v:.0f}", ha="center", va="bottom", fontsize=8,
+                    color=col, fontweight="bold")
+    ax.set_xticks(x); ax.set_xticklabels(LABELS, fontsize=9.5, color=INK2)
+    ax.set_xlim(-0.5, len(KEYS) - 0.5); ax.set_ylim(*ylim)
+    ax.set_ylabel(ylabel, color=INK2, fontsize=10)
+    ax.grid(axis="y", color=GRID, lw=1, zorder=0)
+    ax.tick_params(axis="y", colors=INK2, labelsize=9)
+    _bare(ax); ax.spines["left"].set_visible(False)
+    handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
+               for l, _, c in series]
+    ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
+              bbox_to_anchor=(0.5, -0.17), ncol=2, handletextpad=0.3)
+    ax.set_title(title, color=INK, fontsize=13, fontweight="bold", loc="left", pad=14)
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight", facecolor="white")
+    plt.close(fig); print("saved", out.name)
+
+
+def chart_q2_vs_q4():
+    q2 = pooled("v5g", "Q2"); q4 = pooled("v5g", "Q4")
+    _grouped2([("Q2_K (~10 GB)", [catf1(q2, k, MODEL, LD) for k in KEYS], BLUE),
+               ("Q4_K_S (~15 GB)", [catf1(q4, k, MODEL, LD) for k in KEYS], ORANGE)],
+              "Which quantization? — v5g Q2_K vs Q4_K_S per category  ·  n=1994",
+              OUT / "all_prompts_q2_vs_q4.png")
+
+
+def chart_generalization():
+    zoe = load("zoe", "v5g", "Q4"); maria = load("maria", "v5g", "Q4")
+    _grouped2([("Zoe (in-distribution)", [catf1(zoe, k, MODEL, LD) for k in KEYS], BLUE),
+               ("Maria (out-of-distribution)", [catf1(maria, k, MODEL, LD) for k in KEYS], ORANGE)],
+              "Generalization — v5g on the seen vs an unseen neurologist",
+              OUT / "all_prompts_generalization.png", ylim=(68, 101))
+
+
+def chart_dumbbells():
+    """Core F1 vs strict Certainty F1 (exact 1-4 level), per prompt with Q2 & Q4
+    overlaid, plus Mistral and the best-vs-Mistral headline. Reuses plot_dumbbells."""
+    from analysis.plot_dumbbells import (our_pairs, mistral_pairs, core_and_cert,
+                                         dumbbell, dumbbell_multi)
+    LAB = {"v3g": "v3g", "v5g": "v5g (best)", "v7g": "v7g",
+           "v8g": "v8g (simplified)", "v10g": "v10g (calibrated)"}
+    for pr in ["v5g", "v3g", "v7g", "v8g", "v10g"]:
+        c2, ct2 = core_and_cert(our_pairs(pr, "Q2"))
+        c4, ct4 = core_and_cert(our_pairs(pr, "Q4"))
+        dumbbell_multi([("Q2_K", c2, ct2, BLUE), ("Q4_K_S", c4, ct4, ORANGE)],
+                       f"MedGemma-27B · {LAB[pr]} — core vs certainty (Q2 vs Q4)",
+                       OUT / f"dumbbell_{pr}.png")
+    mc, mct = core_and_cert(mistral_pairs())
+    dumbbell("Mistral-7B — core vs certainty", mc, mct, OUT / "dumbbell_mistral.png")
+    v5c, v5ct = core_and_cert(our_pairs("v5g", "Q4"))
+    dumbbell_multi([("MedGemma v5g", v5c, v5ct, BLUE), ("Mistral-7B", mc, mct, ORANGE)],
+                   "MedGemma v5g vs Mistral-7B — core vs certainty",
+                   OUT / "all_prompts_v5g_vs_mistral.png")
+
+
 if __name__ == "__main__":
     chart_whole()
     chart_bycat()
+    chart_q2_vs_q4()
+    chart_generalization()
+    chart_dumbbells()

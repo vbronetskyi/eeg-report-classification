@@ -50,6 +50,35 @@ and the slowing classes — exactly where the two humans disagree most. That the
 prompts land so close to each other is itself the point: the result is stable across our
 top variants, not a fluke of one prompt.
 
+## Why we win — confidence, not just direction
+
+![v5g vs Mistral — core vs certainty](figures/all_prompts_v5g_vs_mistral.png)
+
+**What you see:** each line runs from **Core F1** (● — did we get present/absent right?)
+to **Certainty F1** (○ — did we get the *exact* 1–4 confidence level?); the line length
+is how much is lost when the exact level is required. Our **v5g (blue)** beats Mistral on
+core almost everywhere, but the real separation is the **exact level**: Mistral's open
+circles collapse (Focal Epi 83 → **41**, Focal Non-epi 76 → 45, Gen Non-epi 75 → 52) — it
+points in the right direction but badly misjudges *how sure* to be — while v5g holds far
+better (Focal Epi 86 → 67, Focal Non-epi 89 → 63). Getting the confidence level right, not
+just the yes/no, is where our prompt+grammar approach pulls ahead.
+
+## Which quantization, and does it generalize?
+
+![Q2 vs Q4 per category](figures/all_prompts_q2_vs_q4.png)
+
+**What you see:** v5g on the two model sizes. They tie on whole-report accuracy (87.6%
+each); per category **Q2_K** is stronger on the epileptiform classes (Focal Epi 88 vs 86)
+while **Q4_K_S** is stronger on the diffuse/slowing classes (Gen Non-epi 89 vs 87). Pick
+Q2_K for half the footprint, Q4_K_S if encephalopathy/diffuse findings matter most.
+
+![Generalization — Zoe vs Maria](figures/all_prompts_generalization.png)
+
+**What you see:** the same model on the **seen** neurologist (Zoe) and an **unseen** one
+(Maria). Performance holds across reporting styles — the epileptiform and focal classes are
+as strong or stronger on the unseen data — so the model generalizes rather than fitting one
+annotator's phrasing.
+
 ## Full numbers (pooled n=1994)
 
 | Prompt | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole vs LD | Whole vs SG |
@@ -90,12 +119,42 @@ real gain, not fitting to LD; the residual gap to the human is close to the leve
 human–human disagreement, which is a reason to validate carefully rather than a claim that
 nothing more is possible.
 
+## Per-prompt detail — core vs certainty, Q2 vs Q4
+
+One chart per prompt, each overlaying both quantizations. The **filled dot** is Core F1
+(present/absent), the **open circle** is strict Certainty F1 (exact 1–4 level); the line
+length is the drop when the exact level is required. All pooled over 1994 reports.
+
+**v5g (best):**
+
+![v5g core vs certainty](figures/dumbbell_v5g.png)
+
+**v3g:**
+
+![v3g core vs certainty](figures/dumbbell_v3g.png)
+
+**v7g:**
+
+![v7g core vs certainty](figures/dumbbell_v7g.png)
+
+**v8g (simplified):**
+
+![v8g core vs certainty](figures/dumbbell_v8g.png)
+
+**v10g (calibrated):**
+
+![v10g core vs certainty](figures/dumbbell_v10g.png)
+
+**Mistral-7B (reference):**
+
+![Mistral core vs certainty](figures/dumbbell_mistral.png)
+
 ## Reproduce
 
 ```bash
 pip install -e .
 python -m analysis.make_tables         # the numbers tables
-python -m analysis.plot_all_prompts    # the two charts above -> reports/figures/
+python -m analysis.plot_all_prompts    # every chart in this report -> reports/figures/
 python -m analysis.validate_vs_sg      # cross-annotator validation
 ```
 Per-run job IDs and hypotheses: [`../experiments/`](../experiments/). Model: MedGemma-27B
