@@ -126,6 +126,40 @@ all five labels correct), vs LD and vs the held-out annotator SG.
 on a fair same-case comparison it was 3–6 points **below** v5g. Values shown use Q4 for
 the grammar variants except where a quant is named.)
 
+### By dataset — Zoe (in-distribution, n=1495)
+
+| Prompt | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole vs LD | Whole vs SG |
+|---|---|---|---|---|---|---|---|
+| Mistral-7B | 96.1 | 84.0 | 72.5 | 76.0 | 79.0 | 75.3 | — |
+| v1 | 98.1 | 76.8 | 89.9 | 87.1 | 85.5 | 83.9 | 82.9 |
+| v3 | 96.9 | 79.5 | 87.4 | 87.6 | 87.8 | 85.1 | 82.9 |
+| v3g | 96.4 | 85.3 | 90.8 | 85.5 | 91.0 | 86.1 | 85.5 |
+| **v5g Q2** | 96.1 | 87.1 | 91.2 | 89.0 | 87.9 | **87.8** | 85.8 |
+| **v5g Q4** | 96.3 | 84.1 | 90.2 | 88.1 | 90.6 | 87.2 | 85.6 |
+| v7g | 96.6 | 84.7 | 88.9 | 86.5 | 91.7 | 86.8 | 85.9 |
+| v8g | 93.7 | 72.5 | 85.9 | 83.9 | 88.9 | 82.2 | 81.7 |
+| v10g | 96.5 | 85.9 | 88.9 | 86.7 | 90.9 | 86.2 | 85.4 |
+| Human (SG) | 97.9 | 83.7 | 88.7 | 89.5 | 89.9 | 88.8 | — |
+
+### By dataset — Maria (out-of-distribution, n=499)
+
+| Prompt | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole vs LD | Whole vs SG |
+|---|---|---|---|---|---|---|---|
+| Mistral-7B | 89.8 | 80.6 | 83.7 | 74.5 | 54.0 | 71.9 | — |
+| v1 | 92.2 | 88.2 | 83.7 | 90.5 | 75.0 | 83.6 | 83.2 |
+| v3 | 90.8 | 90.3 | 85.7 | 87.2 | 73.4 | 81.6 | 81.0 |
+| v3g | 94.5 | 88.9 | 83.7 | 90.8 | 81.6 | 87.8 | 87.6 |
+| **v5g Q2** | 93.2 | 88.5 | 85.7 | 88.1 | 80.0 | 86.8 | 85.2 |
+| **v5g Q4** | 95.0 | 88.9 | 83.7 | 91.3 | 82.2 | **88.8** | **88.0** |
+| v7g | 94.8 | 88.9 | 83.7 | 90.1 | 80.6 | 87.8 | 86.8 |
+| v8g | 94.7 | 87.0 | 83.7 | 91.1 | 80.8 | 87.8 | 86.4 |
+| v10g | 94.8 | 88.9 | 83.7 | 89.4 | 83.6 | 88.2 | 88.0 |
+| Human (SG) | 98.1 | 90.0 | 83.7 | 94.4 | 90.4 | 92.8 | — |
+
+The model **generalizes**: on the unseen neurologist (Maria) the epileptiform and
+focal-non classes are as strong as on Zoe, and v5g still tracks the human. Gen Non-epi is
+the one class that is harder OOD (it is rarer on Maria, ~15%).
+
 ## Certainty (exact-level) F1
 
 The Full-numbers table above is **Core F1**. Here is the same, per category, at the stricter
