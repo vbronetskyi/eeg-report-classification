@@ -222,9 +222,86 @@ def chart_dumbbells():
                    OUT / "all_prompts_v5g_vs_mistral.png")
 
 
+def chart_summary_whole():
+    """Focused whole-report climb for the colleague summary: Mistral, v3, v5, human."""
+    rows = [
+        ("Mistral-7B",   MISTRAL_WHOLE,               GREY),
+        ("v3 (Q2)",      whole(pooled("v3g", "Q2")),  ORANGE),
+        ("v3 (Q4)",      whole(pooled("v3g", "Q4")),  ORANGE),
+        ("v5 (Q2)",      whole(pooled("v5g", "Q2")),  BLUE),
+        ("v5 (Q4, best)", whole(pooled("v5g", "Q4")), BLUE),
+        ("Human (SG)",   89.8,                        GREEN),
+    ]
+    rows.sort(key=lambda r: r[1])
+    fig, ax = plt.subplots(figsize=(8.6, 3.9))
+    fig.patch.set_facecolor("white"); ax.set_facecolor("white")
+    x0 = 72
+    for yi, (name, val, col) in enumerate(rows):
+        ax.plot([x0, val], [yi, yi], color=GRID, lw=1.5, zorder=1, solid_capstyle="round")
+        ax.scatter([val], [yi], s=150, color=col, zorder=3)
+        ax.text(val + 0.4, yi, f"{val:.1f}%", va="center", ha="left", color=col,
+                fontsize=9.5, fontweight="bold")
+    ax.axvline(89.8, color=GREEN, lw=1.1, ls=":", zorder=1)
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels([r[0] for r in rows], color=INK2)
+    ax.set_ylim(-0.6, len(rows) - 0.4); ax.set_xlim(x0, 92)
+    ax.set_xlabel("Whole-report accuracy (all 5 labels correct), %", color=INK2, fontsize=10)
+    ax.grid(axis="x", color=GRID, lw=1, zorder=0)
+    ax.tick_params(axis="x", colors=INK2, labelsize=9); _bare(ax)
+    ax.set_title("Whole-report accuracy  ·  pooled n=1994",
+                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=24)
+    ax.text(0, 1.04, "dotted line = human annotator agreement (89.8%)",
+            transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
+    fig.tight_layout(); fig.savefig(OUT / "summary_whole.png", bbox_inches="tight",
+                                    facecolor="white")
+    plt.close(fig); print("saved summary_whole.png")
+
+
+def chart_summary_bycat():
+    """Focused per-category Core F1 for the colleague summary: Mistral, v3, v5, human."""
+    from matplotlib.lines import Line2D
+    v3g = pooled("v3g", "Q4"); v5g = pooled("v5g", "Q4")
+    series = [
+        ("Mistral-7B", MISTRAL_F1,                              GREY),
+        ("v3",         [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
+        ("v5 (best)",  [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
+        ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
+    ]
+    n = len(series); step = 0.72 / n
+    fig, ax = plt.subplots(figsize=(9.2, 5.6))
+    fig.patch.set_facecolor("white"); ax.set_facecolor("white")
+    ticks = []
+    for ci, lab in enumerate(LABELS):
+        base = (len(KEYS) - 1 - ci) * 1.2; ticks.append((base, lab))
+        ax.axhline(base, color=GRID, lw=1, zorder=0)
+        for i, (name, vals, col) in enumerate(series):
+            yy = base + (i - (n - 1) / 2) * step
+            ax.scatter([vals[ci]], [yy], s=120, color=col, zorder=3,
+                       edgecolor="white", linewidth=1)
+            ax.text(vals[ci] + 0.4, yy, f"{vals[ci]:.0f}", va="center", ha="left",
+                    color=col, fontsize=8.5, fontweight="bold")
+    ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks],
+                                                             fontsize=11.5, color=INK)
+    ax.set_ylim(-0.8, (len(KEYS) - 1) * 1.2 + 0.8); ax.set_xlim(72, 102)
+    ax.grid(axis="x", color=GRID, lw=1, zorder=0)
+    ax.tick_params(axis="x", colors=INK2, labelsize=9); _bare(ax)
+    handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
+               for l, _, c in series]
+    ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
+              bbox_to_anchor=(0.5, -0.1), ncol=4, handletextpad=0.2, columnspacing=1.1)
+    ax.set_title("Per-category F1 — v5 vs v3 vs Mistral-7B vs human",
+                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=26)
+    ax.text(0, 1.04, "each label scored on its own (Core F1) · v3/v5 at Q4_K_S · pooled n=1994",
+            transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
+    fig.tight_layout(); fig.savefig(OUT / "summary_bycat.png", bbox_inches="tight",
+                                    facecolor="white")
+    plt.close(fig); print("saved summary_bycat.png")
+
+
 if __name__ == "__main__":
     chart_whole()
     chart_bycat()
     chart_q2_vs_q4()
     chart_generalization()
     chart_dumbbells()
+    chart_summary_whole()
+    chart_summary_bycat()

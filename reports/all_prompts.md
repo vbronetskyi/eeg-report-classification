@@ -7,18 +7,18 @@ paper's **Mistral-7B** (Tian et al.) and the **human** second annotator (SG vs L
 
 ## The prompts
 
-| Prompt | One line | What it changes |
-|---|---|---|
-| **v1** | Baseline | Impression-first, short definitions — the starting point |
-| **v2** | Professor's revision | Neurologist role, read the report *body* first, extended ACNS/ILAE definitions |
-| **v3** | Focal-epi exclusions | v1 + an explicit list of what does **not** count as focal epileptiform (raises precision) |
-| **v4** | Procedure | v1 + a step-by-step detect → localize → assign routine |
-| **v5** | Slowing discriminator | v3 + a focal-vs-generalized rule for **non-epileptiform slowing** |
-| **v6** | Ask for consistency | v3 + a prompt instruction to self-check the overall/subtype agreement |
-| **v7** | Body-aware abnormality | v5 + "call it abnormal if the body describes an abnormality the Impression downplays" |
-| **v8** | Simplified | A deliberately short prompt (~340 tokens) — only the two decision boundaries |
-| **v9** | Reasoning-first | Concise expert frame + a free-text `reasoning` field, letting the model deliberate |
-| **v10** | Evidence calibration | v5 + "tie confidence to how explicitly the report supports each subtype" |
+| Prompt | Base | What it adds (technical) | Outcome |
+|---|---|---|---|
+| **v1** | — | Impression-first; short ACNS-style definitions; 5-label 1–4 schema; JSON output under a GBNF grammar | Baseline — 83.9% whole; already beats Mistral on 4/5 categories |
+| **v2** | v1 | Neurologist *system* role; read Description/body **first**; keep body findings over a conservative Impression; extended ACNS/ILAE definitions | Helps Maria abnormality but **over-calls Focal Epi** → weaker overall |
+| **v3** | v1 | Explicit **focal-epileptiform exclusion list**: generalized/bilateral discharges, "sharply-contoured"/benign variants, artifacts, and focal slowing all *≠* focal-epi | ↑ Focal-Epi precision without losing recall — **kept** |
+| **v4** | v1 | Step-by-step epileptiform **procedure**: detect → localize (focal/generalized) → assign | ≈ v3, marginally worse |
+| **v5** | v3 | **Focal-vs-generalized discriminator for slowing** (read distribution from the wording; forbid double-flagging one finding) | ↑ the slowing classes — **best prompt content** |
+| **v6** | v3 | Prompt asks the model to **reconcile** overall/subtype consistency itself | **Rejected** — asking does not hold; even hurts other fields |
+| **v7** | v5 | **Body-aware abnormality** — call it abnormal on a body finding the Impression downplays | **Rejected** — no gain on Abnormality |
+| **v8** | — | Deliberately **simplified** (~340 tokens): only the two decision questions, no exclusion lists | **Rejected** — Focal-Epi collapses (exclusions are load-bearing) |
+| **v9** | — | **Reasoning-first**: concise frame + a free-text `reasoning` field before the labels (larger max-tokens) | **Rejected** — 3–6 pts worse, much slower |
+| **v10** | v5 | **Evidence-calibration** rule: tie confidence to explicit textual support; prefer *absent* when balanced | **Rejected** — ~1 pt below v5 |
 
 A **`…g`** suffix (e.g. **v5g**) means the variant is run with **grammar-enforced
 consistency** (`ENFORCE_CONSISTENCY=1`): a GBNF grammar emits `overall_abnormal` last and
