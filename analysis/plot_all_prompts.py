@@ -251,18 +251,42 @@ def _grouped_dumbbells(series, title, subtitle, out, figsize=(9.6, 8.4), band=1.
     plt.close(fig); print("saved", out.name)
 
 
-def chart_summary_bycat():
-    """Colleague summary, per category: Mistral, v3 (Q2/Q4), v5 (Q2/Q4), human — with both
-    Core F1 (filled) and Certainty F1 (open), so the confidence drop is visible per model."""
-    from analysis.plot_dumbbells import our_pairs, mistral_pairs, core_and_cert
-    def cc(v, q):
-        c, ct = core_and_cert(our_pairs(v, q)); return [x*100 for x in c], [x*100 for x in ct]
-    def hpairs():
-        return [(c["sg_labels"], c["ld_labels"]) for ds in ("zoe", "maria") for c in load(ds, "v1", "Q2")]
-    mc, mct = core_and_cert(list(mistral_pairs())); mc=[x*100 for x in mc]; mct=[x*100 for x in mct]
-    hc, hct = core_and_cert(hpairs()); hc=[x*100 for x in hc]; hct=[x*100 for x in hct]
-    v3q2c, v3q2t = cc("v3g", "Q2"); v3q4c, v3q4t = cc("v3g", "Q4")
-    v5q2c, v5q2t = cc("v5g", "Q2"); v5q4c, v5q4t = cc("v5g", "Q4")
+def _mistral_pairs_ds(datasets):
+    """(mistral_pred, ld) pairs restricted to the given dataset(s)."""
+    import os, importlib, sqlite3
+    db = ("/project/6019337/databases/eeg_fha/release_001/"
+          "eeg_reports_release_001_mistral_public_250825.db")
+    fc = {"abnormality": "Abnormality", "focal_epileptiform_activity": "Focal Epi",
+          "generalized_epileptiform_activity": "Gen Epi",
+          "focal_non_epileptiform_activity": "Focal Non-epi",
+          "generalized_non_epileptiform_activity": "Gen Non-epi"}
+    conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True); conn.row_factory = sqlite3.Row
+    cols = ", ".join(f'"{c}" AS "{k}"' for k, c in fc.items())
+    mist = {r["hid"]: {k: int(r[k]) for k in KEYS}
+            for r in conn.execute(f'SELECT Hashed_ReportURN AS hid, {cols} FROM classifications')}
+    import core.cohort as co
+    out = []
+    for ds in datasets:
+        os.environ["DATASET"] = ds; importlib.reload(co)
+        ld = co.load_db(co.LD_DB); sg = co.load_db(co.SG_DB)
+        for h in co.build_cohort(sg, ld):
+            out.append((mist[h], {k: ld[h]["labels"][k] for k in KEYS}))
+    return out
+
+
+def chart_summary_bycat(datasets=("zoe", "maria"), suffix="", ntag="pooled n=1994"):
+    """Per category: Mistral, v3 (Q2/Q4), v5 (Q2/Q4), human — both Core F1 (filled) and
+    Certainty F1 (open), for the given dataset(s). suffix names the output file."""
+    from analysis.plot_dumbbells import core_and_cert
+    def cc(pairs):
+        c, ct = core_and_cert(pairs); return [x*100 for x in c], [x*100 for x in ct]
+    def our(v, q):
+        return cc([({k: c["model"][k]["pred"] for k in KEYS}, c["ld_labels"])
+                   for ds in datasets for c in load(ds, v, q)])
+    mc, mct = cc(_mistral_pairs_ds(datasets))
+    hc, hct = cc([(c["sg_labels"], c["ld_labels"]) for ds in datasets for c in load(ds, "v1", "Q2")])
+    v3q2c, v3q2t = our("v3g", "Q2"); v3q4c, v3q4t = our("v3g", "Q4")
+    v5q2c, v5q2t = our("v5g", "Q2"); v5q4c, v5q4t = our("v5g", "Q4")
     series = [
         ("Mistral-7B", mc, mct, GREY),
         ("v3 (Q2)", v3q2c, v3q2t, ORANGE),
@@ -274,8 +298,8 @@ def chart_summary_bycat():
     _grouped_dumbbells(
         series,
         "Per-category — Core vs Certainty F1  ·  all six models",
-        "● Core F1   ○ Certainty F1 (exact level) · line = the drop · pooled n=1994",
-        OUT / "summary_bycat.png", figsize=(9.8, 8.6))
+        f"● Core F1   ○ Certainty F1 (exact level) · line = the drop · {ntag}",
+        OUT / f"summary_bycat{suffix}.png", figsize=(9.8, 8.6))
 
 
 if __name__ == "__main__":
@@ -285,3 +309,5 @@ if __name__ == "__main__":
     chart_dumbbells()
     chart_summary_whole()
     chart_summary_bycat()
+    chart_summary_bycat(("zoe",), "_zoe", "Zoe · in-distribution · n=1495")
+    chart_summary_bycat(("maria",), "_maria", "Maria · out-of-distribution · n=499")

@@ -52,6 +52,17 @@ classes (Gen Epi, Focal Non-epi, Gen Non-epi) and at the human level on the epil
 classes. On **Certainty**, Mistral's open circles collapse (Focal Epi 41, Focal Non-epi 45)
 while ours hold — the model captures not just the finding but *how sure* to be about it.
 
+**Zoe (in-distribution, n=1495):**
+
+![Per-category Core vs Certainty — Zoe](figures/summary_bycat_zoe.png)
+
+**Maria (out-of-distribution, n=499):**
+
+![Per-category Core vs Certainty — Maria](figures/summary_bycat_maria.png)
+
+The picture holds on both neurologists: our prompts stay far above Mistral and near the
+human on Core, and hold the Certainty level where Mistral drops.
+
 ## Why we win — confidence, not just direction
 
 ![v5g vs Mistral — core vs certainty](figures/all_prompts_v5g_vs_mistral.png)

@@ -22,9 +22,19 @@ rule for slowing. Each step climbs toward the human line; **v5 (Q4)** is the bes
 
 ![Per-category F1](figures/summary_bycat.png)
 
-**v5 (blue) beats Mistral (grey) in every category** — by 10–15 points on the harder three
-(Gen Epi, Focal Non-epi, Gen Non-epi) — and lands **at the human level on the epileptiform
-categories** (Focal Epi, Gen Epi), trailing the human only on Abnormality and focal slowing.
+**Each model is a dumbbell:** filled dot = **Core F1** (present/absent — number on the
+right), open dot = **Certainty F1** (exact 1–4 level — number on the left); the line is the
+drop. On **Core**, our v5 beats Mistral (grey) in every category — by 10–15 points on the
+harder three — and lands at the human level on the epileptiform categories. On
+**Certainty**, Mistral's open circles collapse (Focal Epi 41) while ours hold.
+
+**Zoe (in-distribution, n=1495):**
+
+![Per-category — Zoe](figures/summary_bycat_zoe.png)
+
+**Maria (out-of-distribution, n=499):**
+
+![Per-category — Maria](figures/summary_bycat_maria.png)
 
 ## Numbers (pooled n = 1994, Core F1 vs LD)
 
