@@ -84,34 +84,23 @@ annotator's phrasing.
 
 ## How the metrics work (read before the tables)
 
-Every label is scored on the **1–4 scale** (1 confident-no · 2 low-no · 3 low-yes ·
-4 confident-yes). Two independent choices define each number.
+Every label uses the **1–4 scale** (1 confident-no · 2 low-no · 3 low-yes · 4 confident-yes).
+We score with **F1 throughout**, at two strictness levels:
 
-**1. Strictness — Core vs Exact**
-- **Core** — collapse to yes/no (1–2 = absent, 3–4 = present) and check the *side* only.
-  "3 vs 4" counts as correct (both mean present).
-- **Exact** — the exact 1–4 must match. "3 vs 4" is wrong (right direction, wrong
-  confidence). Always the harder test.
+- **Core F1** — collapse to yes/no (1–2 = absent, 3–4 = present) and score how well
+  "present" is detected. "3 vs 4" counts as correct (both mean present).
+- **Certainty F1** — the exact 1–4 must match; "3 vs 4" is wrong (right direction, wrong
+  confidence). The harder test — it shows whether the model captures *how sure* to be.
 
-**2. Scoring — Accuracy vs F1.** For one label, every report falls into four outcomes:
-TP (said present, is present), FP (said present, isn't), FN (said absent, is present),
-TN (said absent, isn't). The two scores use these differently:
+**Why F1, not plain accuracy?** The classes are very imbalanced (Focal/Gen Epi are present
+in only ~5% of reports). Plain accuracy would score ~98% just by always predicting
+"absent", hiding the failure to catch the rare findings. F1 = 2·TP / (2·TP + FP + FN)
+ignores the easy true-negatives and measures only how well the *present* class is actually
+caught (balancing precision and recall). It is the paper's core metric.
 
-- **Accuracy** = (TP + TN) / all — counts everything, *including the easy true-negatives*.
-- **F1** = 2·TP / (2·TP + FP + FN) — *ignores TN*; measures only how well the positive
-  ("present") class is caught, balancing precision and recall.
-
-The gap between them comes entirely from TN. On a **rare** class (Focal/Gen Epi ~5%
-present) there are ~1900 easy TN, so accuracy is inflated (~98%) while F1 stays honest
-(~80%). On a **balanced** class (Abnormality ~50/50) TN doesn't dominate, so the two
-nearly coincide (~95%). **This is why the charts use F1** — it doesn't reward the trivial
-"say absent" on rare findings.
-
-**Whole-report (All-5)** = the share of reports where *all five* labels are correct — one
-intuitive number (this is what the first chart and the "All-5" column show).
-
-*The charts use Core F1 (and Certainty F1 for the exact level); the whole-report chart
-uses All-5 accuracy. The tables below give both F1 and the plain "% correct" (accuracy).*
+**The one exception is Whole-report (All-5)** — the share of reports where *all five* labels
+are correct. That is an exact-match count by nature (there is no F1 for a whole report), so
+it stays a plain percentage.
 
 ## Full numbers (pooled n=1994)
 
@@ -135,54 +124,32 @@ all five labels correct), vs LD and vs the held-out annotator SG.
 on a fair same-case comparison it was 3–6 points **below** v5g. Values shown use Q4 for
 the grammar variants except where a quant is named.)
 
-## Accuracy view — % guessed correctly (core & exact)
+## Certainty (exact-level) F1
 
-The charts above use **F1** (the paper's metric, best for imbalanced classes). If you
-prefer plain **accuracy** (correct ÷ all), here it is, in the two levels from the dumbbell
-charts. The **All-5** column of the *core* table is exactly the whole-report % from the
-first chart (e.g. v5g = 87.6%).
+The Full-numbers table above is **Core F1**. Here is the same, per category, at the stricter
+**Certainty** level — the exact 1–4 confidence must match. This is the harder test, and it is
+where our approach separates most from Mistral.
 
-> Caveat: per-category accuracy looks very high on the **rare** classes (Focal Epi ~98%)
-> simply because "absent" is the right answer most of the time — that inflation is why the
-> charts use F1, which exposes the over-calling. Accuracy is most meaningful on the common
-> classes (Abnormality, Focal/Gen Non-epi) and on the **All-5** column.
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
+|---|---|---|---|---|---|
+| Mistral-7B | 72.4 | 41.4 | 69.2 | 44.8 | 52.2 |
+| v1 | 56.0 | 67.6 | 78.1 | 45.2 | 54.7 |
+| v3 | 59.8 | 69.2 | 74.6 | 50.5 | 56.5 |
+| v3g (Q4) | 75.6 | 66.3 | 75.9 | 60.6 | 67.1 |
+| **v5g (Q2)** | 65.8 | 76.8 | 83.6 | 59.3 | 60.1 |
+| **v5g (Q4)** | 74.1 | 66.7 | 72.4 | 63.1 | 69.0 |
+| v7g (Q4) | 77.6 | 66.0 | 74.5 | 62.2 | 69.6 |
+| v8g (Q4) | 61.6 | 59.4 | 73.4 | 50.4 | 61.1 |
+| v10g (Q4) | 75.1 | 67.7 | 77.6 | 62.0 | 71.5 |
+| Human (SG) | 92.0 | 72.0 | 84.1 | 46.9 | 58.3 |
 
-**Core accuracy — % present/absent correct (1–2 vs 3–4):**
+The rare **epileptiform** classes are the story: at the exact level Mistral collapses (Focal
+Epi 41) while our grammar prompts hold (66–77). On Abnormality the human is far ahead (92) —
+judging *how sure* to be about "abnormal" is the hardest thing to imitate. On the slowing
+classes even the human's certainty F1 is modest (Focal Non 47, Gen Non 58), and our models
+sit at or above it.
 
-| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | All-5 |
-|---|---|---|---|---|---|---|
-| Mistral-7B | 95.0 | 98.3 | 97.3 | 86.2 | 89.7 | 74.5 |
-| v1 | 97.0 | 97.8 | 98.9 | 93.1 | 92.3 | 83.9 |
-| v3 | 95.9 | 98.2 | 98.7 | 93.1 | 93.2 | 84.2 |
-| v3g (Q4) | 96.0 | 98.6 | 98.9 | 92.2 | 94.9 | 86.5 |
-| **v5g (Q2)** | 95.6 | 98.8 | 99.0 | 93.7 | 94.0 | **87.6** |
-| **v5g (Q4)** | 96.1 | 98.5 | 98.9 | 93.5 | 94.8 | **87.6** |
-| v7g (Q4) | 96.3 | 98.6 | 98.8 | 92.5 | 95.2 | 87.1 |
-| v8g (Q4) | 93.8 | 97.3 | 98.5 | 91.2 | 93.8 | 83.6 |
-| v10g (Q4) | 96.2 | 98.7 | 98.8 | 92.5 | 95.0 | 86.7 |
-| Human (SG) | 98.0 | 98.6 | 98.9 | 94.7 | 95.3 | 89.8 |
-
-**Exact accuracy — % exact 1–4 level correct:**
-
-| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | All-5 |
-|---|---|---|---|---|---|---|
-| Mistral-7B | 76.2 | 71.9 | 94.9 | 64.9 | 80.5 | 40.7 |
-| v1 | 72.6 | 96.9 | 98.1 | 77.8 | 82.4 | 56.8 |
-| v3 | 74.1 | 97.3 | 97.9 | 79.6 | 83.2 | 59.1 |
-| v3g (Q4) | 82.3 | 96.8 | 98.0 | 80.9 | 85.9 | 66.8 |
-| **v5g (Q2)** | 75.6 | 97.3 | 98.2 | 82.2 | 84.7 | 66.5 |
-| **v5g (Q4)** | 81.6 | 96.9 | 97.8 | 82.6 | 86.4 | 67.9 |
-| v7g (Q4) | 83.2 | 96.5 | 97.9 | 82.4 | 87.1 | 69.9 |
-| v8g (Q4) | 74.4 | 92.1 | 97.4 | 77.7 | 84.0 | 61.1 |
-| v10g (Q4) | 81.6 | 96.7 | 98.0 | 81.4 | 86.9 | 67.5 |
-| Human (SG) | 89.3 | 97.4 | 98.5 | 79.2 | 85.5 | 65.9 |
-
-The **exact** table is where our approach separates from Mistral: on the exact confidence
-level Mistral drops sharply (Focal Epi 72%, Focal Non-epi 65%) while our grammar prompts
-hold in the 80–97% range — and on whole-report exact accuracy (All-5) v5g/v7g even edge
-past the human annotator, whose SG-vs-LD exact agreement is 65.9%.
-
-Regenerate: `python -m analysis.accuracy_tables`.
+Regenerate: `python -m analysis.f1_tables`.
 
 ## What worked, what didn't
 
