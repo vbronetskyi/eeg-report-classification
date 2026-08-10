@@ -44,14 +44,16 @@ baseline, because dropping the detailed rules brings the over-calling straight b
 prompts (**v5g**, **v3g**, **v7g**), Mistral-7B, and the human annotator. Note these are a
 *different metric* from the first chart: the first chart's 87.6% is the share of reports
 with **all five** labels correct at once; here each number is the F1 of **one** label —
-so the two are not meant to match. Our prompts (blue / orange / violet)
-**cluster tightly together and sit far above Mistral (grey)** on the harder three classes
-(Gen Epi, Focal Non-epi, Gen Non-epi) — the gap to Mistral is 10–15 points there. Against
-the **human (green)** the cluster lands right at the human level: **matching or beating
-it on the epileptiform categories** (Focal Epi, Gen Epi) and trailing only on Abnormality
-and the slowing classes — exactly where the two humans disagree most. That the three
-prompts land so close to each other is itself the point: the result is stable across our
-top variants, not a fluke of one prompt.
+so the two are not meant to match. (Grammar variants shown at **Q4_K_S** — the same quant
+as the Full-numbers table, so the dots match those rows exactly.) Our prompts (blue /
+orange / violet) **cluster tightly together and sit far above Mistral (grey)** on the
+harder three classes (Gen Epi, Focal Non-epi, Gen Non-epi) — the gap to Mistral is 13–14
+points there. Against the **human (green)** the cluster sits right at the human level:
+**at or slightly above it on the epileptiform classes** (Focal Epi ~86 vs 86, Gen Epi
+~88–89 vs 88) and on **Gen Non-epi** (~89–90 vs 90), trailing only on **Abnormality** and
+**Focal Non-epi** — where even the two humans disagree most. That the three prompts land
+so close to each other is itself the point: the result is stable across our top variants,
+not a fluke of one prompt.
 
 ## Why we win — confidence, not just direction
 

@@ -110,7 +110,8 @@ def chart_bycat():
     # own sub-rows inside the band so every dot carries a value label. Each number is the
     # per-label Core F1 (0-100) — a single-label quality score, NOT the whole-report %.
     from matplotlib.lines import Line2D
-    v3g = pooled("v3g", "Q2"); v5g = pooled("v5g", "Q2"); v7g = pooled("v7g", "Q2")
+    # Q4 for the grammar variants — matches the Full-numbers table rows.
+    v3g = pooled("v3g", "Q4"); v5g = pooled("v5g", "Q4"); v7g = pooled("v7g", "Q4")
     series = [
         ("Mistral-7B", MISTRAL_F1,                              GREY),
         ("v3g",        [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
@@ -146,8 +147,8 @@ def chart_bycat():
     ax.set_title("Per-category F1 — our top prompts vs Mistral-7B vs human",
                  color=INK, fontsize=13, fontweight="bold", loc="left", pad=30)
     ax.text(0, 1.045,
-            "each label scored on its own (F1, 0–100) · NOT the whole-report % — "
-            "different metric · pooled n=1994",
+            "each label scored on its own (Core F1, 0–100) · NOT the whole-report % · "
+            "grammar variants at Q4_K_S · pooled n=1994",
             transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
     fig.tight_layout(); fig.savefig(OUT / "all_prompts_bycat.png", bbox_inches="tight",
                                     facecolor="white")
