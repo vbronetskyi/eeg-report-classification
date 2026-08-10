@@ -17,8 +17,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from matplotlib.ticker import MultipleLocator
+
 from analysis.full_lib import (KEYS, LABELS, load, INK, INK2, GRID,
-                               BLUE, ORANGE, GREEN, VIOLET)
+                               BLUE, ORANGE, GREEN, VIOLET, RED)
 
 GREY = "#8b94a4"
 
@@ -106,53 +108,28 @@ def chart_whole():
 
 
 def chart_bycat():
-    # Horizontal grouped dot plot: one BAND per category, the 5 models stacked on their
-    # own sub-rows inside the band so every dot carries a value label. Each number is the
-    # per-label Core F1 (0-100) — a single-label quality score, NOT the whole-report %.
-    from matplotlib.lines import Line2D
-    # Q4 for the grammar variants — matches the Full-numbers table rows.
-    v3g = pooled("v3g", "Q4"); v5g = pooled("v5g", "Q4"); v7g = pooled("v7g", "Q4")
+    # Per category, our top prompts + Mistral + human, each as a dumbbell:
+    # filled dot = Core F1, open dot = Certainty F1 (exact 1-4 level), line = the drop.
+    from analysis.plot_dumbbells import our_pairs, mistral_pairs, core_and_cert
+    def cc(v, q):
+        c, ct = core_and_cert(our_pairs(v, q)); return [x*100 for x in c], [x*100 for x in ct]
+    def hpairs():
+        return [(c["sg_labels"], c["ld_labels"]) for ds in ("zoe", "maria") for c in load(ds, "v1", "Q2")]
+    mc, mct = core_and_cert(list(mistral_pairs())); mc=[x*100 for x in mc]; mct=[x*100 for x in mct]
+    hc, hct = core_and_cert(hpairs()); hc=[x*100 for x in hc]; hct=[x*100 for x in hct]
+    v3c, v3t = cc("v3g", "Q4"); v5c, v5t = cc("v5g", "Q4"); v7c, v7t = cc("v7g", "Q4")
     series = [
-        ("Mistral-7B", MISTRAL_F1,                              GREY),
-        ("v3g",        [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
-        ("v7g",        [catf1(v7g, k, MODEL, LD) for k in KEYS], VIOLET),
-        ("v5g (best)", [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
-        ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
+        ("Mistral-7B", mc, mct, GREY),
+        ("v3g", v3c, v3t, ORANGE),
+        ("v7g", v7c, v7t, VIOLET),
+        ("v5g (best)", v5c, v5t, BLUE),
+        ("Human (SG)", hc, hct, GREEN),
     ]
-    n = len(series); step = 0.9 / n
-    fig, ax = plt.subplots(figsize=(9.4, 7.2))
-    fig.patch.set_facecolor("white"); ax.set_facecolor("white")
-    ticks = []
-    for ci, lab in enumerate(LABELS):
-        base = (len(KEYS) - 1 - ci) * 1.2          # category band centre
-        ticks.append((base, lab))
-        ax.axhline(base, color=GRID, lw=1, zorder=0)
-        for i, (name, vals, col) in enumerate(series):
-            yy = base + (i - (n - 1) / 2) * step
-            ax.scatter([vals[ci]], [yy], s=120, color=col, zorder=3,
-                       edgecolor="white", linewidth=1)
-            ax.text(vals[ci] + 0.4, yy, f"{vals[ci]:.0f}", va="center", ha="left",
-                    color=col, fontsize=8, fontweight="bold")
-    ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks],
-                                                             fontsize=11.5, color=INK)
-    ax.set_ylim(-0.8, (len(KEYS) - 1) * 1.2 + 0.8)
-    ax.set_xlim(72, 102); ax.set_xlabel("Per-label Core F1, %", color=INK2, fontsize=10)
-    ax.grid(axis="x", color=GRID, lw=1, zorder=0)
-    ax.tick_params(axis="x", colors=INK2, labelsize=9)
-    _bare(ax)
-    handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
-               for l, _, c in series]
-    ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
-              bbox_to_anchor=(0.5, -0.11), ncol=5, handletextpad=0.2, columnspacing=1.1)
-    ax.set_title("Per-category F1 — our top prompts vs Mistral-7B vs human",
-                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=30)
-    ax.text(0, 1.045,
-            "each label scored on its own (Core F1, 0–100) · NOT the whole-report % · "
-            "grammar variants at Q4_K_S · pooled n=1994",
-            transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
-    fig.tight_layout(); fig.savefig(OUT / "all_prompts_bycat.png", bbox_inches="tight",
-                                    facecolor="white")
-    plt.close(fig); print("saved all_prompts_bycat.png")
+    _grouped_dumbbells(
+        series,
+        "Per-category — Core vs Certainty F1  ·  top prompts vs Mistral vs human",
+        "● Core F1   ○ Certainty F1 (exact level) · grammar variants at Q4_K_S · pooled n=1994",
+        OUT / "all_prompts_bycat.png", figsize=(9.6, 8.0))
 
 
 def _grouped2(series, title, out, ylabel="Core F1, %", ylim=(72, 101)):
@@ -256,45 +233,68 @@ def chart_summary_whole():
     plt.close(fig); print("saved summary_whole.png")
 
 
-def chart_summary_bycat():
-    """Focused per-category Core F1 for the colleague summary: Mistral, v3, v5, human."""
+def _grouped_dumbbells(series, title, subtitle, out, figsize=(9.6, 8.4), band=1.5):
+    """series: list of (label, core[5], cert[5], color). Per category (row band), one
+    dumbbell per model: filled dot = Core F1, open dot = Certainty F1, line = the drop."""
     from matplotlib.lines import Line2D
-    v3g = pooled("v3g", "Q4"); v5g = pooled("v5g", "Q4")
-    series = [
-        ("Mistral-7B", MISTRAL_F1,                              GREY),
-        ("v3",         [catf1(v3g, k, MODEL, LD) for k in KEYS], ORANGE),
-        ("v5 (best)",  [catf1(v5g, k, MODEL, LD) for k in KEYS], BLUE),
-        ("Human (SG)", [catf1(v5g, k, SG, LD) for k in KEYS],    GREEN),
-    ]
-    n = len(series); step = 0.72 / n
-    fig, ax = plt.subplots(figsize=(9.2, 5.6))
+    fig, ax = plt.subplots(figsize=figsize)
     fig.patch.set_facecolor("white"); ax.set_facecolor("white")
+    n = len(series); step = (band * 0.62) / n
     ticks = []
     for ci, lab in enumerate(LABELS):
-        base = (len(KEYS) - 1 - ci) * 1.2; ticks.append((base, lab))
+        base = (len(KEYS) - 1 - ci) * band; ticks.append((base, lab))
         ax.axhline(base, color=GRID, lw=1, zorder=0)
-        for i, (name, vals, col) in enumerate(series):
+        for i, (name, core, cert, col) in enumerate(series):
             yy = base + (i - (n - 1) / 2) * step
-            ax.scatter([vals[ci]], [yy], s=120, color=col, zorder=3,
-                       edgecolor="white", linewidth=1)
-            ax.text(vals[ci] + 0.4, yy, f"{vals[ci]:.0f}", va="center", ha="left",
-                    color=col, fontsize=8.5, fontweight="bold")
+            ax.plot([cert[ci], core[ci]], [yy, yy], color=col, lw=2.4, alpha=0.85,
+                    solid_capstyle="round", zorder=2)
+            ax.scatter([cert[ci]], [yy], s=46, facecolor="white", edgecolor=col,
+                       linewidth=1.7, zorder=3)          # Certainty (open)
+            ax.scatter([core[ci]], [yy], s=58, color=col, zorder=3)   # Core (filled)
     ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks],
                                                              fontsize=11.5, color=INK)
-    ax.set_ylim(-0.8, (len(KEYS) - 1) * 1.2 + 0.8); ax.set_xlim(72, 102)
+    ax.set_ylim(-band * 0.7, (len(KEYS) - 1) * band + band * 0.7)
+    ax.set_xlim(38, 102); ax.xaxis.set_major_locator(MultipleLocator(10))
+    ax.set_xlabel("F1, %  ·  ● Core (present/absent)   ○ Certainty (exact 1–4 level)",
+                  color=INK2, fontsize=10)
     ax.grid(axis="x", color=GRID, lw=1, zorder=0)
     ax.tick_params(axis="x", colors=INK2, labelsize=9); _bare(ax)
     handles = [Line2D([0], [0], marker="o", linestyle="", markersize=9, color=c, label=l)
-               for l, _, c in series]
+               for l, _core, _cert, c in series]
     ax.legend(handles=handles, frameon=False, fontsize=9.5, loc="lower center",
-              bbox_to_anchor=(0.5, -0.1), ncol=4, handletextpad=0.2, columnspacing=1.1)
-    ax.set_title("Per-category F1 — v5 vs v3 vs Mistral-7B vs human",
-                 color=INK, fontsize=13, fontweight="bold", loc="left", pad=26)
-    ax.text(0, 1.04, "each label scored on its own (Core F1) · v3/v5 at Q4_K_S · pooled n=1994",
-            transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
-    fig.tight_layout(); fig.savefig(OUT / "summary_bycat.png", bbox_inches="tight",
-                                    facecolor="white")
-    plt.close(fig); print("saved summary_bycat.png")
+              bbox_to_anchor=(0.5, -0.12), ncol=len(series), handletextpad=0.2,
+              columnspacing=0.9)
+    ax.set_title(title, color=INK, fontsize=13, fontweight="bold", loc="left", pad=26)
+    ax.text(0, 1.03, subtitle, transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
+    fig.tight_layout(); fig.savefig(out, bbox_inches="tight", facecolor="white")
+    plt.close(fig); print("saved", out.name)
+
+
+def chart_summary_bycat():
+    """Colleague summary, per category: Mistral, v3 (Q2/Q4), v5 (Q2/Q4), human — with both
+    Core F1 (filled) and Certainty F1 (open), so the confidence drop is visible per model."""
+    from analysis.plot_dumbbells import our_pairs, mistral_pairs, core_and_cert
+    def cc(v, q):
+        c, ct = core_and_cert(our_pairs(v, q)); return [x*100 for x in c], [x*100 for x in ct]
+    def hpairs():
+        return [(c["sg_labels"], c["ld_labels"]) for ds in ("zoe", "maria") for c in load(ds, "v1", "Q2")]
+    mc, mct = core_and_cert(list(mistral_pairs())); mc=[x*100 for x in mc]; mct=[x*100 for x in mct]
+    hc, hct = core_and_cert(hpairs()); hc=[x*100 for x in hc]; hct=[x*100 for x in hct]
+    v3q2c, v3q2t = cc("v3g", "Q2"); v3q4c, v3q4t = cc("v3g", "Q4")
+    v5q2c, v5q2t = cc("v5g", "Q2"); v5q4c, v5q4t = cc("v5g", "Q4")
+    series = [
+        ("Mistral-7B", mc, mct, GREY),
+        ("v3 (Q2)", v3q2c, v3q2t, ORANGE),
+        ("v3 (Q4)", v3q4c, v3q4t, RED),
+        ("v5 (Q2)", v5q2c, v5q2t, BLUE),
+        ("v5 (Q4)", v5q4c, v5q4t, VIOLET),
+        ("Human (SG)", hc, hct, GREEN),
+    ]
+    _grouped_dumbbells(
+        series,
+        "Per-category — Core vs Certainty F1  ·  all six models",
+        "● Core F1   ○ Certainty F1 (exact level) · line = the drop · pooled n=1994",
+        OUT / "summary_bycat.png", figsize=(9.8, 8.6))
 
 
 if __name__ == "__main__":

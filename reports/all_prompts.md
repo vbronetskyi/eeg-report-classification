@@ -185,7 +185,70 @@ judging *how sure* to be about "abnormal" is the hardest thing to imitate. On th
 classes even the human's certainty F1 is modest (Focal Non 47, Gen Non 58), and our models
 sit at or above it.
 
+### Certainty — Zoe (in-distribution, n=1495)
+
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
+|---|---|---|---|---|---|
+| Mistral-7B | 72.5 | 42.7 | 65.5 | 41.4 | 55.0 |
+| v1 | 53.1 | 60.9 | 76.5 | 39.5 | 56.4 |
+| v3 | 56.7 | 63.0 | 71.5 | 44.6 | 59.0 |
+| v3g | 77.3 | 64.7 | 73.7 | 64.3 | 71.8 |
+| **v5g (Q2)** | 61.9 | 72.6 | 83.0 | 53.7 | 60.8 |
+| **v5g (Q4)** | 74.7 | 63.8 | 70.6 | 65.8 | 72.2 |
+| v7g | 78.6 | 61.3 | 73.2 | 63.8 | 73.0 |
+| v8g | 57.1 | 55.0 | 71.8 | 42.7 | 61.6 |
+| v10g | 75.5 | 63.7 | 75.8 | 64.3 | 73.9 |
+| Human (SG) | 91.5 | 69.8 | 84.2 | 42.5 | 58.9 |
+
+### Certainty — Maria (out-of-distribution, n=499)
+
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
+|---|---|---|---|---|---|
+| Mistral-7B | 72.2 | 38.8 | 83.7 | 55.5 | 36.5 |
+| v1 | 66.7 | 82.4 | 83.7 | 61.5 | 44.1 |
+| v3 | 71.3 | 83.9 | 85.7 | 67.4 | 41.7 |
+| v3g | 69.6 | 69.8 | 83.7 | 50.0 | 40.8 |
+| **v5g (Q2)** | 79.2 | 85.2 | 85.7 | 75.1 | 56.3 |
+| **v5g (Q4)** | 72.3 | 73.0 | 79.1 | 55.3 | 50.7 |
+| v7g | 73.9 | 76.2 | 79.1 | 57.5 | 50.0 |
+| v8g | 77.8 | 69.6 | 79.1 | 72.8 | 58.3 |
+| v10g | 73.9 | 76.2 | 83.7 | 55.3 | 57.5 |
+| Human (SG) | 93.5 | 76.7 | 83.7 | 59.1 | 54.8 |
+
 Regenerate: `python -m analysis.f1_tables`.
+
+## Full matrix — every prompt × quantization
+
+All variants at both model sizes (Core F1 vs LD, pooled n=1994). The grammar-enforced
+variants (`…g`) are the strong ones; the plain prompts (v1–v6) are shown for completeness.
+
+| Prompt | Quant | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole |
+|---|---|---|---|---|---|---|---|
+| v1 | Q2_K | 96.8 | 80.4 | 88.5 | 88.0 | 84.0 | 83.9 |
+| v1 | Q4_K_S | 97.8 | 73.2 | 87.3 | 84.7 | 88.9 | 81.3 |
+| v2 | Q2_K | 97.6 | 63.6 | 88.1 | 85.9 | 82.4 | 79.0 |
+| v2 | Q4_K_S | 98.1 | 70.2 | 88.5 | 85.8 | 89.0 | 82.8 |
+| v3 | Q2_K | 95.6 | 82.7 | 87.0 | 87.5 | 85.7 | 84.2 |
+| v3 | Q4_K_S | 96.8 | 81.7 | 88.1 | 85.8 | 89.4 | 83.2 |
+| v4 | Q2_K | 96.0 | 82.5 | 86.8 | 87.3 | 86.6 | 83.4 |
+| v4 | Q4_K_S | 97.1 | 79.3 | 87.6 | 84.1 | 89.0 | 81.1 |
+| v5 | Q2_K | 92.6 | 82.5 | 89.0 | 88.8 | 86.8 | 82.8 |
+| v5 | Q4_K_S | 97.1 | 82.9 | 87.6 | 88.3 | 88.1 | 84.7 |
+| v6 | Q2_K | 93.6 | 83.8 | 88.0 | 83.6 | 85.1 | 82.0 |
+| v6 | Q4_K_S | 97.0 | 83.8 | 88.7 | 87.7 | 88.1 | 84.6 |
+| **v3g** | Q2_K | 95.2 | 88.5 | 90.4 | 88.2 | 85.3 | 86.1 |
+| **v3g** | Q4_K_S | 95.9 | 86.4 | 89.2 | 86.9 | 89.6 | 86.5 |
+| **v5g** | Q2_K | 95.4 | 87.6 | 89.9 | 88.8 | 86.7 | **87.6** |
+| **v5g** | Q4_K_S | 96.0 | 85.6 | 88.8 | 89.0 | 89.3 | **87.6** |
+| v7g | Q2_K | 94.4 | 85.3 | 89.6 | 87.8 | 85.4 | 86.1 |
+| v7g | Q4_K_S | 96.2 | 86.0 | 87.8 | 87.4 | 90.0 | 87.1 |
+| v8g | Q2_K | 94.4 | 58.6 | 76.0 | 83.9 | 85.0 | 79.3 |
+| v8g | Q4_K_S | 93.9 | 76.9 | 85.4 | 85.8 | 87.7 | 83.6 |
+| v10g | Q2_K | 94.6 | 84.8 | 89.6 | 88.6 | 85.9 | 86.5 |
+| v10g | Q4_K_S | 96.1 | 86.9 | 87.8 | 87.4 | 89.8 | 86.7 |
+
+(v9g omitted — the reasoning-first run is much slower and did not finish; on a fair
+same-case comparison it was 3–6 points below v5g.)
 
 ## What worked, what didn't
 
