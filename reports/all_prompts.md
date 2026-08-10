@@ -164,20 +164,21 @@ the one class that is harder OOD (it is rarer on Maria, ~15%).
 
 The Full-numbers table above is **Core F1**. Here is the same, per category, at the stricter
 **Certainty** level — the exact 1–4 confidence must match. This is the harder test, and it is
-where our approach separates most from Mistral.
+where our approach separates most from Mistral. The **Whole** column = share of reports with
+all five *exact* levels correct (an accuracy — there is no F1 for a whole report).
 
-| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
-|---|---|---|---|---|---|
-| Mistral-7B | 72.4 | 41.4 | 69.2 | 44.8 | 52.2 |
-| v1 | 56.0 | 67.6 | 78.1 | 45.2 | 54.7 |
-| v3 | 59.8 | 69.2 | 74.6 | 50.5 | 56.5 |
-| v3g (Q4) | 75.6 | 66.3 | 75.9 | 60.6 | 67.1 |
-| **v5g (Q2)** | 65.8 | 76.8 | 83.6 | 59.3 | 60.1 |
-| **v5g (Q4)** | 74.1 | 66.7 | 72.4 | 63.1 | 69.0 |
-| v7g (Q4) | 77.6 | 66.0 | 74.5 | 62.2 | 69.6 |
-| v8g (Q4) | 61.6 | 59.4 | 73.4 | 50.4 | 61.1 |
-| v10g (Q4) | 75.1 | 67.7 | 77.6 | 62.0 | 71.5 |
-| Human (SG) | 92.0 | 72.0 | 84.1 | 46.9 | 58.3 |
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole |
+|---|---|---|---|---|---|---|
+| Mistral-7B | 72.4 | 41.4 | 69.2 | 44.8 | 52.2 | 40.7 |
+| v1 | 56.0 | 67.6 | 78.1 | 45.2 | 54.7 | 56.8 |
+| v3 | 59.8 | 69.2 | 74.6 | 50.5 | 56.5 | 59.1 |
+| v3g | 75.6 | 66.3 | 75.9 | 60.6 | 67.1 | 66.8 |
+| **v5g (Q2)** | 65.8 | 76.8 | 83.6 | 59.3 | 60.1 | 66.5 |
+| **v5g (Q4)** | 74.1 | 66.7 | 72.4 | 63.1 | 69.0 | 67.9 |
+| v7g | 77.6 | 66.0 | 74.5 | 62.2 | 69.6 | 69.9 |
+| v8g | 61.6 | 59.4 | 73.4 | 50.4 | 61.1 | 61.1 |
+| v10g | 75.1 | 67.7 | 77.6 | 62.0 | 71.5 | 67.5 |
+| Human (SG) | 92.0 | 72.0 | 84.1 | 46.9 | 58.3 | 65.9 |
 
 The rare **epileptiform** classes are the story: at the exact level Mistral collapses (Focal
 Epi 41) while our grammar prompts hold (66–77). On Abnormality the human is far ahead (92) —
@@ -187,33 +188,33 @@ sit at or above it.
 
 ### Certainty — Zoe (in-distribution, n=1495)
 
-| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
-|---|---|---|---|---|---|
-| Mistral-7B | 72.5 | 42.7 | 65.5 | 41.4 | 55.0 |
-| v1 | 53.1 | 60.9 | 76.5 | 39.5 | 56.4 |
-| v3 | 56.7 | 63.0 | 71.5 | 44.6 | 59.0 |
-| v3g | 77.3 | 64.7 | 73.7 | 64.3 | 71.8 |
-| **v5g (Q2)** | 61.9 | 72.6 | 83.0 | 53.7 | 60.8 |
-| **v5g (Q4)** | 74.7 | 63.8 | 70.6 | 65.8 | 72.2 |
-| v7g | 78.6 | 61.3 | 73.2 | 63.8 | 73.0 |
-| v8g | 57.1 | 55.0 | 71.8 | 42.7 | 61.6 |
-| v10g | 75.5 | 63.7 | 75.8 | 64.3 | 73.9 |
-| Human (SG) | 91.5 | 69.8 | 84.2 | 42.5 | 58.9 |
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole |
+|---|---|---|---|---|---|---|
+| Mistral-7B | 72.5 | 42.7 | 65.5 | 41.4 | 55.0 | 40.4 |
+| v1 | 53.1 | 60.9 | 76.5 | 39.5 | 56.4 | 53.4 |
+| v3 | 56.7 | 63.0 | 71.5 | 44.6 | 59.0 | 56.0 |
+| v3g | 77.3 | 64.7 | 73.7 | 64.3 | 71.8 | 66.0 |
+| **v5g (Q2)** | 61.9 | 72.6 | 83.0 | 53.7 | 60.8 | 62.9 |
+| **v5g (Q4)** | 74.7 | 63.8 | 70.6 | 65.8 | 72.2 | 66.4 |
+| v7g | 78.6 | 61.3 | 73.2 | 63.8 | 73.0 | 68.6 |
+| v8g | 57.1 | 55.0 | 71.8 | 42.7 | 61.6 | 57.0 |
+| v10g | 75.5 | 63.7 | 75.8 | 64.3 | 73.9 | 66.0 |
+| Human (SG) | 91.5 | 69.8 | 84.2 | 42.5 | 58.9 | 63.5 |
 
 ### Certainty — Maria (out-of-distribution, n=499)
 
-| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non |
-|---|---|---|---|---|---|
-| Mistral-7B | 72.2 | 38.8 | 83.7 | 55.5 | 36.5 |
-| v1 | 66.7 | 82.4 | 83.7 | 61.5 | 44.1 |
-| v3 | 71.3 | 83.9 | 85.7 | 67.4 | 41.7 |
-| v3g | 69.6 | 69.8 | 83.7 | 50.0 | 40.8 |
-| **v5g (Q2)** | 79.2 | 85.2 | 85.7 | 75.1 | 56.3 |
-| **v5g (Q4)** | 72.3 | 73.0 | 79.1 | 55.3 | 50.7 |
-| v7g | 73.9 | 76.2 | 79.1 | 57.5 | 50.0 |
-| v8g | 77.8 | 69.6 | 79.1 | 72.8 | 58.3 |
-| v10g | 73.9 | 76.2 | 83.7 | 55.3 | 57.5 |
-| Human (SG) | 93.5 | 76.7 | 83.7 | 59.1 | 54.8 |
+| Model | Abnorm | Focal Epi | Gen Epi | Focal Non | Gen Non | Whole |
+|---|---|---|---|---|---|---|
+| Mistral-7B | 72.2 | 38.8 | 83.7 | 55.5 | 36.5 | 41.5 |
+| v1 | 66.7 | 82.4 | 83.7 | 61.5 | 44.1 | 66.9 |
+| v3 | 71.3 | 83.9 | 85.7 | 67.4 | 41.7 | 68.3 |
+| v3g | 69.6 | 69.8 | 83.7 | 50.0 | 40.8 | 69.1 |
+| **v5g (Q2)** | 79.2 | 85.2 | 85.7 | 75.1 | 56.3 | 77.4 |
+| **v5g (Q4)** | 72.3 | 73.0 | 79.1 | 55.3 | 50.7 | 72.5 |
+| v7g | 73.9 | 76.2 | 79.1 | 57.5 | 50.0 | 73.7 |
+| v8g | 77.8 | 69.6 | 79.1 | 72.8 | 58.3 | 73.5 |
+| v10g | 73.9 | 76.2 | 83.7 | 55.3 | 57.5 | 71.9 |
+| Human (SG) | 93.5 | 76.7 | 83.7 | 59.1 | 54.8 | 73.3 |
 
 Regenerate: `python -m analysis.f1_tables`.
 
