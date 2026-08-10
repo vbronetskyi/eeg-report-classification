@@ -107,29 +107,6 @@ def chart_whole():
     plt.close(fig); print("saved all_prompts_whole.png")
 
 
-def chart_bycat():
-    # Per category, our top prompts + Mistral + human, each as a dumbbell:
-    # filled dot = Core F1, open dot = Certainty F1 (exact 1-4 level), line = the drop.
-    from analysis.plot_dumbbells import our_pairs, mistral_pairs, core_and_cert
-    def cc(v, q):
-        c, ct = core_and_cert(our_pairs(v, q)); return [x*100 for x in c], [x*100 for x in ct]
-    def hpairs():
-        return [(c["sg_labels"], c["ld_labels"]) for ds in ("zoe", "maria") for c in load(ds, "v1", "Q2")]
-    mc, mct = core_and_cert(list(mistral_pairs())); mc=[x*100 for x in mc]; mct=[x*100 for x in mct]
-    hc, hct = core_and_cert(hpairs()); hc=[x*100 for x in hc]; hct=[x*100 for x in hct]
-    v3c, v3t = cc("v3g", "Q4"); v5c, v5t = cc("v5g", "Q4"); v7c, v7t = cc("v7g", "Q4")
-    series = [
-        ("Mistral-7B", mc, mct, GREY),
-        ("v3g", v3c, v3t, ORANGE),
-        ("v7g", v7c, v7t, VIOLET),
-        ("v5g (best)", v5c, v5t, BLUE),
-        ("Human (SG)", hc, hct, GREEN),
-    ]
-    _grouped_dumbbells(
-        series,
-        "Per-category — Core vs Certainty F1  ·  top prompts vs Mistral vs human",
-        "● Core F1   ○ Certainty F1 (exact level) · grammar variants at Q4_K_S · pooled n=1994",
-        OUT / "all_prompts_bycat.png", figsize=(9.6, 8.0))
 
 
 def _grouped2(series, title, out, ylabel="Core F1, %", ylim=(72, 101)):
@@ -251,10 +228,14 @@ def _grouped_dumbbells(series, title, subtitle, out, figsize=(9.6, 8.4), band=1.
             ax.scatter([cert[ci]], [yy], s=46, facecolor="white", edgecolor=col,
                        linewidth=1.7, zorder=3)          # Certainty (open)
             ax.scatter([core[ci]], [yy], s=58, color=col, zorder=3)   # Core (filled)
+            ax.text(core[ci] + 0.7, yy, f"{core[ci]:.0f}", va="center", ha="left",
+                    fontsize=7, color=col, fontweight="bold")   # Core % — right of dot
+            ax.text(cert[ci] - 0.7, yy, f"{cert[ci]:.0f}", va="center", ha="right",
+                    fontsize=7, color=col, fontweight="bold")   # Certainty % — left of dot
     ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks],
                                                              fontsize=11.5, color=INK)
     ax.set_ylim(-band * 0.7, (len(KEYS) - 1) * band + band * 0.7)
-    ax.set_xlim(38, 102); ax.xaxis.set_major_locator(MultipleLocator(10))
+    ax.set_xlim(33, 104); ax.xaxis.set_major_locator(MultipleLocator(10))
     ax.set_xlabel("F1, %  ·  ● Core (present/absent)   ○ Certainty (exact 1–4 level)",
                   color=INK2, fontsize=10)
     ax.grid(axis="x", color=GRID, lw=1, zorder=0)
@@ -299,7 +280,6 @@ def chart_summary_bycat():
 
 if __name__ == "__main__":
     chart_whole()
-    chart_bycat()
     chart_q2_vs_q4()
     chart_generalization()
     chart_dumbbells()

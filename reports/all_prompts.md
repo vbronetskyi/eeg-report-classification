@@ -36,24 +36,21 @@ clears Mistral by ~10 points.** Adding grammar-enforced consistency is the big s
 The rejected ideas cluster below it: **v8 (simplified)** even falls *below* the v1
 baseline, because dropping the detailed rules brings the over-calling straight back.
 
-## Our top prompts vs Mistral and human, per category
+## Per category — Core and Certainty F1
 
-![Per-category F1 — top prompts vs Mistral and human](figures/all_prompts_bycat.png)
+![Per-category Core vs Certainty F1](figures/summary_bycat.png)
 
-**What you see:** Core F1 for **each label scored on its own**, for our three strongest
-prompts (**v5g**, **v3g**, **v7g**), Mistral-7B, and the human annotator. Note these are a
-*different metric* from the first chart: the first chart's 87.6% is the share of reports
-with **all five** labels correct at once; here each number is the F1 of **one** label —
-so the two are not meant to match. (Grammar variants shown at **Q4_K_S** — the same quant
-as the Full-numbers table, so the dots match those rows exactly.) Our prompts (blue /
-orange / violet) **cluster tightly together and sit far above Mistral (grey)** on the
-harder three classes (Gen Epi, Focal Non-epi, Gen Non-epi) — the gap to Mistral is 13–14
-points there. Against the **human (green)** the cluster sits right at the human level:
-**at or slightly above it on the epileptiform classes** (Focal Epi ~86 vs 86, Gen Epi
-~88–89 vs 88) and on **Gen Non-epi** (~89–90 vs 90), trailing only on **Abnormality** and
-**Focal Non-epi** — where even the two humans disagree most. That the three prompts land
-so close to each other is itself the point: the result is stable across our top variants,
-not a fluke of one prompt.
+**What you see:** each label scored on its own, for Mistral-7B, our **v3** and **v5**
+prompts (both quantizations), and the human annotator. Every model is a dumbbell: the
+**filled dot = Core F1** (present/absent — number on its right) and the **open dot =
+Certainty F1** (exact 1–4 level — number on its left); the line length is the drop when the
+exact confidence level is required. (These are per-label F1 — a *different metric* from the
+first chart's whole-report %.)
+
+Two things stand out. On **Core**, our prompts sit far above Mistral on the harder three
+classes (Gen Epi, Focal Non-epi, Gen Non-epi) and at the human level on the epileptiform
+classes. On **Certainty**, Mistral's open circles collapse (Focal Epi 41, Focal Non-epi 45)
+while ours hold — the model captures not just the finding but *how sure* to be about it.
 
 ## Why we win — confidence, not just direction
 
