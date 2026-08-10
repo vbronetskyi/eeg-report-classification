@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-# Regenerate the two report PDFs from the markdown READMEs (figures embedded).
+# Regenerate the report PDFs from the markdown (figures embedded).
 # Requires pandoc + xelatex (both available on the Fir login nodes).
 set -euo pipefail
-cd "$(dirname "$0")"
-for f in reports/prompt_variants reports/baseline; do
+cd "$(dirname "$0")"          # -> reports/
+for f in all_prompts prompt_variants baseline; do
+  [ -f "$f.md" ] || continue
   pandoc "$f.md" -o "$f.pdf" --pdf-engine=xelatex \
-    -V geometry:margin=1.8cm -V fontsize=10pt \
+    -V geometry:margin=1.7cm -V fontsize=10pt \
     -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono" \
     -V colorlinks=true -V linkcolor=blue -V urlcolor=blue \
     --resource-path=.
-  echo "wrote $f.pdf"
+  echo "wrote reports/$f.pdf"
 done
