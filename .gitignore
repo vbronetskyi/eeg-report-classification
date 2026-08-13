@@ -15,3 +15,4 @@ results/*.out
 results/*.pid
 results/*.txt
 results/h100_priority_checks/
+results/labels/
