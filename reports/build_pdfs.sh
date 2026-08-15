@@ -3,7 +3,7 @@
 # Requires pandoc + xelatex (both available on the Fir login nodes).
 set -euo pipefail
 cd "$(dirname "$0")"          # -> reports/
-for f in summary all_prompts prompt_variants baseline; do
+for f in medgemma_vs_mistral summary all_prompts prompt_variants baseline; do
   [ -f "$f.md" ] || continue
   pandoc "$f.md" -o "$f.pdf" --pdf-engine=xelatex \
     -V geometry:margin=1.7cm -V fontsize=10pt \
