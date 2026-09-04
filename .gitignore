@@ -16,3 +16,10 @@ results/*.pid
 results/*.txt
 results/h100_priority_checks/
 results/labels/
+# Harvard (HEEDB) data lives under a data-use agreement — never publish it
+harvard_llama_results/
+results/harvard/
+results/triphasic_harvard/
+# large regenerable artifacts (release DBs are shipped from the project release dir)
+results/release/
+results/triphasic/

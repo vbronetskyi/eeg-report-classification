@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Compare the two full labelings of the 45,545 processed_reports dataset —
-MedGemma-27B (v5g, ours, in results/labels/) vs Mistral-7B (the paper's release DB) —
-and, on the reports that also have human ground truth (LD), show which labeler is more
-accurate. Prints the markdown tables used in reports/medgemma_vs_mistral.md and saves
-the accuracy chart.
+"""Compare the full labelings of the 45,545 processed_reports dataset.
 
-Run:  python -m analysis.labels_vs_mistral
+Primary labeling: MedGemma-27B **v5g Q4_K_S** (results/labels/q4_k_s/) — the config
+that generalizes best to out-of-distribution reports, which is exactly this dataset
+(new hospitals / physicians). Also loaded: the smaller **Q2_K** MedGemma labeling
+(results/labels/) as a quant cross-check, and the paper's **Mistral-7B** release.
+
+Prints the markdown tables used in reports/medgemma_vs_mistral.md and saves the
+accuracy chart. Run:  python -m analysis.labels_vs_mistral
 """
 from __future__ import annotations
 
@@ -27,19 +29,20 @@ KEYS = ["abnormality", "focal_epileptiform_activity", "generalized_epileptiform_
 LAB = ["Abnormality", "Focal Epi", "Gen Epi", "Focal Non-epi", "Gen Non-epi"]
 COL = dict(zip(KEYS, LAB))
 GREY = "#8b94a4"
+AQUA = "#1baf7a"
 MIST_DB = ("/project/6019337/databases/eeg_fha/release_001/"
            "eeg_reports_release_001_mistral_public_250825.db")
 OUT = Path("reports/figures"); OUT.mkdir(parents=True, exist_ok=True)
 pres = lambda v: v >= 3
 
 
-def load_ours():
-    ours = {}
-    for f in glob.glob("results/labels/labels_*.json"):
+def load_labels(pattern):
+    d = {}
+    for f in glob.glob(pattern):
         for c in json.load(open(f))["cases"]:
             if c.get("model"):
-                ours[c["hashed_id"]] = {k: c["model"][k]["pred"] for k in KEYS}
-    return ours
+                d[c["hashed_id"]] = {k: c["model"][k]["pred"] for k in KEYS}
+    return d
 
 
 def load_mistral():
@@ -59,24 +62,32 @@ def load_ld():
     return ld
 
 
-def f1(hs, a, b, k):
+def prc(a, hs, k):
+    return 100 * sum(pres(a[h][k]) for h in hs) / len(hs)
+
+
+def agree(a, b, hs, k):
+    return 100 * sum(pres(a[h][k]) == pres(b[h][k]) for h in hs) / len(hs)
+
+
+def whole_agree(a, b, hs):
+    return 100 * sum(all(pres(a[h][k]) == pres(b[h][k]) for k in KEYS) for h in hs) / len(hs)
+
+
+def f1(a, g, hs, k):
     tp = fp = fn = 0
     for h in hs:
-        m, g = pres(a[h][k]), pres(b[h][k])
-        tp += m and g; fp += m and not g; fn += (not m) and g
+        m, gg = pres(a[h][k]), pres(g[h][k])
+        tp += m and gg; fp += m and not gg; fn += (not m) and gg
     p = tp / (tp + fp) if tp + fp else 0.0
     r = tp / (tp + fn) if tp + fn else 0.0
     return 100 * (2 * p * r / (p + r) if p + r else 0.0)
 
 
-def whole(hs, a, b):
-    return 100 * sum(1 for h in hs if all(pres(a[h][k]) == pres(b[h][k]) for k in KEYS)) / len(hs)
-
-
 def chart(ann, ours, mist, ld):
-    from matplotlib.lines import Line2D
-    mg = [f1(ann, ours, ld, k) for k in KEYS]
-    mi = [f1(ann, mist, ld, k) for k in KEYS]
+    """Q4 (ours) vs Mistral — Core F1 vs the human annotator, per category."""
+    mg = [f1(ours, ld, ann, k) for k in KEYS]
+    mi = [f1(mist, ld, ann, k) for k in KEYS]
     fig, ax = plt.subplots(figsize=(9.0, 4.8))
     fig.patch.set_facecolor("white"); ax.set_facecolor("white")
     y = list(range(len(KEYS)))[::-1]
@@ -86,7 +97,7 @@ def chart(ann, ours, mist, ld):
     ax.scatter(mi, y, s=150, color=GREY, zorder=3, edgecolor="white", linewidth=1.2,
                label="Mistral-7B")
     ax.scatter(mg, y, s=150, color=BLUE, zorder=3, edgecolor="white", linewidth=1.2,
-               label="MedGemma v5g (ours)")
+               label="MedGemma v5g Q4 (ours)")
     for yi, a in zip(y, mg):
         ax.text(a + 0.6, yi, f"{a:.0f}", va="center", ha="left", color=BLUE,
                 fontsize=9, fontweight="bold")
@@ -103,7 +114,7 @@ def chart(ann, ours, mist, ld):
     ax.tick_params(length=0); ax.set_axisbelow(True)
     ax.legend(frameon=False, fontsize=10, loc="lower center",
               bbox_to_anchor=(0.5, -0.22), ncol=2)
-    ax.set_title("Accuracy on the annotated reports — MedGemma vs Mistral",
+    ax.set_title("Accuracy on the annotated reports — MedGemma (Q4) vs Mistral",
                  color=INK, fontsize=13, fontweight="bold", loc="left", pad=24)
     ax.text(0, 1.03, f"Core F1 vs human ground truth (LD) · n={len(ann)} annotated of 45,545",
             transform=ax.transAxes, fontsize=9, color=INK2, va="bottom")
@@ -113,23 +124,32 @@ def chart(ann, ours, mist, ld):
 
 
 if __name__ == "__main__":
-    ours, mist, ld = load_ours(), load_mistral(), load_ld()
-    both = [h for h in ours if h in mist]
+    q4 = load_labels("results/labels/q4_k_s/labels_*.json")   # primary
+    q2 = load_labels("results/labels/labels_*.json")          # quant cross-check
+    mist, ld = load_mistral(), load_ld()
+    both = [h for h in q4 if h in mist and h in q2]
     ann = [h for h in both if h in ld and all(isinstance(ld[h][k], int) for k in KEYS)]
-    print(f"45k comparable: {len(both)} · annotated overlap: {len(ann)}\n")
-    print("### Agreement on the 45,545 reports (present/absent)\n")
-    print("| Category | MedGemma 'present' | Mistral 'present' | Agreement |")
+    print(f"45k comparable (Q4 & Q2 & Mistral): {len(both)} · annotated overlap (LD): {len(ann)}\n")
+
+    print("### Q4 vs Mistral — agreement on the 45,545 reports (present/absent)\n")
+    print("| Category | MedGemma Q4 'present' | Mistral 'present' | Agreement |")
     print("|---|---|---|---|")
     for k in KEYS:
-        mg = 100 * sum(pres(ours[h][k]) for h in both) / len(both)
-        mi = 100 * sum(pres(mist[h][k]) for h in both) / len(both)
-        ag = 100 * sum(pres(ours[h][k]) == pres(mist[h][k]) for h in both) / len(both)
-        print(f"| {COL[k]} | {mg:.1f}% | {mi:.1f}% | {ag:.1f}% |")
-    print(f"\nWhole-report agreement (present/absent): {whole(both, ours, mist):.1f}%")
-    print("\n### Accuracy vs human (LD) on the annotated overlap — Core F1\n")
-    print("| Category | MedGemma | Mistral |")
-    print("|---|---|---|")
+        print(f"| {COL[k]} | {prc(q4, both, k):.1f}% | {prc(mist, both, k):.1f}% | {agree(q4, mist, both, k):.1f}% |")
+    print(f"\nWhole-report agreement Q4~Mistral: {whole_agree(q4, mist, both):.1f}%")
+
+    print("\n### Q2 vs Q4 — where the two MedGemma quants differ (45,545)\n")
+    print("| Category | Q2 'present' | Q4 'present' | Agreement |")
+    print("|---|---|---|---|")
     for k in KEYS:
-        print(f"| {COL[k]} | {f1(ann, ours, ld, k):.1f} | {f1(ann, mist, ld, k):.1f} |")
-    print(f"| **Whole-report** | **{whole(ann, ours, ld):.1f}%** | **{whole(ann, mist, ld):.1f}%** |")
-    chart(ann, ours, mist, ld)
+        print(f"| {COL[k]} | {prc(q2, both, k):.1f}% | {prc(q4, both, k):.1f}% | {agree(q2, q4, both, k):.1f}% |")
+    print(f"\nWhole-report agreement Q2~Q4: {whole_agree(q2, q4, both):.1f}%")
+
+    print("\n### Accuracy vs human (LD) on the annotated overlap — Core F1\n")
+    print("| Category | MedGemma Q4 | MedGemma Q2 | Mistral |")
+    print("|---|---|---|---|")
+    for k in KEYS:
+        print(f"| {COL[k]} | {f1(q4, ld, ann, k):.1f} | {f1(q2, ld, ann, k):.1f} | {f1(mist, ld, ann, k):.1f} |")
+    wa = lambda a: 100 * sum(all(pres(a[h][k]) == pres(ld[h][k]) for k in KEYS) for h in ann) / len(ann)
+    print(f"| **Whole report** | **{wa(q4):.1f}%** | **{wa(q2):.1f}%** | **{wa(mist):.1f}%** |")
+    chart(ann, q4, mist, ld)
