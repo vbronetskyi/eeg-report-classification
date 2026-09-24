@@ -108,12 +108,47 @@ def build_abnormality(out_dir):
     out.close()
 
 
+def build_triphasic(out_dir):
+    """Guarded triphasic labels: long = primary columns, short = _alt (matches the FHA release DB)."""
+    from analysis.triphasic_harvard_analysis import load_variant, text_lookup, guard
+    rows = []
+    for coh in COHORTS:
+        s_raw, l_raw = load_variant(coh, "short"), load_variant(coh, "long")
+        flagged = [rid for rid in set(s_raw) | set(l_raw)
+                   if (s_raw.get(rid, {}).get("triphasic") or {}).get("status") in ("present", "explicitly_absent")
+                   or (l_raw.get(rid, {}).get("triphasic") or {}).get("status") in ("present", "explicitly_absent")]
+        txt = text_lookup(coh, flagged)
+        sg, _ = guard(s_raw, txt)
+        lg, _ = guard(l_raw, txt)
+        for rid in set(sg) | set(lg):
+            ls = lg.get(rid) or ("not_mentioned", "not_applicable")
+            ss = sg.get(rid) or ("not_mentioned", "not_applicable")
+            rows.append((rid, coh, ls[0], ls[1], ss[0], ss[1]))
+    path = Path(out_dir) / "eeg_reports_release_001_medgemma_Q4KS_triphasic_harvard_250825.db"
+    out = open_fresh(path)
+    out.execute('CREATE TABLE triphasic ("report_id" TEXT, "cohort" TEXT, "status" TEXT, '
+                '"phenotype" TEXT, "status_alt" TEXT, "phenotype_alt" TEXT, '
+                'PRIMARY KEY (report_id, cohort))')
+    out.executemany("INSERT INTO triphasic VALUES (?,?,?,?,?,?)", rows)
+    out.execute('CREATE TABLE about ("key" TEXT, "value" TEXT)')
+    ab = about_rows("triphasic waves — status + phenotype",
+                    "two prompts (long = primary columns, short = _alt cross-check); "
+                    "faithfulness guard: present/absent require the term 'triphasic' in the report text, "
+                    "else reset to not_mentioned",
+                    "status, phenotype, status_alt, phenotype_alt")
+    out.executemany("INSERT INTO about VALUES (?,?)", ab)
+    out.commit()
+    print(f"{path.name}: {out.execute('SELECT COUNT(*) FROM triphasic').fetchone()[0]} rows")
+    out.close()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out-dir", default="results/harvard/release")
     args = ap.parse_args()
     Path(args.out_dir).mkdir(parents=True, exist_ok=True)
     build_abnormality(args.out_dir)
+    build_triphasic(args.out_dir)
     build_status("slowing", "slowing", "slowing_harvard",
                  [("focal", "focal_slowing"), ("generalized", "generalized_slowing")],
                  args.out_dir, "focal / generalized slowing — status per report",
