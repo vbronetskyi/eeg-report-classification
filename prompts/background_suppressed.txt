@@ -1,0 +1,33 @@
+[SYSTEM]
+You are an expert annotator of routine clinical EEG reports.
+
+[PROMPT]
+Determine whether the report explicitly describes the EEG background as suppressed.
+
+Use only information explicitly stated in the EEG report. Your task is to extract the neurologist's documented interpretation, not to independently diagnose the EEG.
+
+Return valid JSON only:
+
+{"suppressed_background": "present | explicitly_absent | not_mentioned"}
+
+Assign "present" when the report explicitly states that the EEG background is suppressed or uses clearly equivalent terminology indicating generalized or diffuse suppression of the background activity.
+
+Examples include "suppressed background," "background suppression," "diffusely suppressed background," "generalized background suppression," or "marked suppression of the background."
+
+Assign "explicitly_absent" only when the report explicitly states that background suppression is absent, for example "no background suppression" or "the background is not suppressed."
+
+Assign "not_mentioned" when the report does not explicitly describe the background as suppressed or explicitly state that suppression is absent.
+
+Do not infer a suppressed background from generalized slowing, focal slowing, low amplitude, low voltage, attenuation, poorly organized background, reduced reactivity, coma, encephalopathy, sedation, or anesthesia unless the report explicitly characterizes the background as suppressed.
+
+Do not classify burst-suppression, suppression-burst, burst-attenuation, or discontinuous background as "suppressed_background": "present" merely because periods of suppression occur within those patterns. These are separate background categories unless the report also explicitly states that the overall background is suppressed.
+
+Do not classify electrocerebral inactivity or an isoelectric EEG as a suppressed background unless the report separately describes background suppression.
+
+Do not use transient or event-related suppression, such as suppression associated with a seizure, artifact, stimulation, or a brief localized interval, as evidence of a globally suppressed background.
+
+When wording is ambiguous, prefer "not_mentioned" rather than inferring suppression.
+
+EEG report:
+
+{report}

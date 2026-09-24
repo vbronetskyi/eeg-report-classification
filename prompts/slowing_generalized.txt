@@ -1,0 +1,42 @@
+[SYSTEM]
+You are an expert clinical EEG report classifier.
+
+[PROMPT]
+Task: Determine whether the EEG report describes generalized slowing—diffuse or bilaterally synchronous slowing affecting the background or broad regions of both hemispheres.
+
+Return exactly one JSON object:
+
+{"generalized_slowing": "present | explicitly_absent | not_mentioned"}
+
+Classification rules:
+
+present: The report describes generalized, diffuse, global, or bilaterally synchronous slowing.
+Examples: "mild diffuse slowing," "generalized theta-delta slowing," "diffusely slow background," "background slower than expected for age," "generalized polymorphic delta activity," or "generalized rhythmic delta activity."
+Include an abnormally slow posterior dominant rhythm when the report identifies it as abnormal for the patient's age or as evidence of generalized slowing.
+Generalized slowing remains present when described as mild, subtle, intermittent, occasional, or nonspecific.
+Focal slowing may coexist with generalized slowing; classify as present if generalized slowing is also documented.
+
+explicitly_absent: The report directly states that generalized or diffuse slowing is absent.
+Examples: "no generalized slowing," "no diffuse background slowing," or "no evidence of diffuse cerebral dysfunction."
+A statement that the background is "normal," "age appropriate," or "well organized" counts as explicitly absent only when it clearly characterizes the entire current EEG background as normal.
+"No generalized epileptiform discharges" does not establish the absence of generalized slowing.
+
+not_mentioned: The report neither describes generalized slowing nor clearly states that it is absent.
+Focal, regional, hemispheric, or multifocal slowing alone is not generalized slowing.
+Normal slowing associated only with drowsiness or sleep is not generalized slowing.
+Do not infer generalized slowing solely from encephalopathy, altered mental status, dementia, medication use, imaging findings, or another clinical diagnosis.
+Do not classify low voltage, attenuation, suppression, discontinuity, poor reactivity, or poor organization as generalized slowing unless abnormally slow activity is also described.
+
+Additional instructions:
+1. Use only information stated in the supplied EEG report.
+2. Interpret negation, uncertainty, and historical references carefully.
+3. Findings from previous EEGs do not describe the current recording unless the report states that they persist.
+4. Give priority to the final interpretation or impression when it resolves ambiguity in the descriptive section.
+5. If presence and absence are both stated, use the statement referring to the current recording and the most specific final interpretation. If a genuine contradiction remains, classify as "present" because generalized slowing was documented.
+6. Return no explanation, evidence, Markdown, or text outside the JSON object.
+
+EEG report:
+
+<EEG_REPORT>
+{report}
+</EEG_REPORT>

@@ -1,0 +1,38 @@
+[SYSTEM]
+You are an expert clinical EEG report classifier.
+
+[PROMPT]
+Task: Determine whether the EEG report describes focal slowing (localized, regional, lateralized, or multifocal slowing of cerebral activity).
+
+Return exactly one JSON object:
+
+{"focal_slowing": "present | explicitly_absent | not_mentioned"}
+
+Classification rules:
+
+present: The report states that slowing is focal, regional, lateralized, hemispheric, or multifocal. This includes localized theta or delta activity described as intermittent, persistent, continuous, rhythmic, or polymorphic.
+Examples: "left temporal slowing," "intermittent right frontotemporal theta-delta activity," "focal polymorphic delta slowing," "slowing over the left hemisphere," or "independent bitemporal slowing."
+Focal slowing remains present if the report says it is subtle, rare, mild, occasional, or of uncertain significance.
+
+explicitly_absent: The report directly states that focal slowing is absent.
+Examples: "no focal slowing," "no focal or lateralized slowing," "no focal cerebral dysfunction," or "no focal abnormalities."
+A statement such as "no focal epileptiform discharges" does not establish the absence of focal slowing.
+
+not_mentioned: The report neither describes focal slowing nor explicitly states that it is absent.
+Use this category for normal EEG reports that do not specifically address focal slowing.
+Generalized or diffuse slowing alone is not focal slowing.
+Do not infer focal slowing from a diagnosis, symptoms, imaging findings, prior EEGs, focal seizures, asymmetry without stated slowing, or focal epileptiform discharges.
+Do not classify attenuation, suppression, voltage asymmetry, breach rhythm, or reduced organization as focal slowing unless the report explicitly describes localized slow activity.
+
+Additional instructions:
+Use only the information stated in the supplied report.
+Interpret negation and uncertainty carefully.
+Give priority to the final EEG interpretation or impression when it resolves ambiguity in the descriptive section.
+If both presence and absence are stated, use the statement referring to the current recording and the most specific final interpretation. If a genuine contradiction remains, classify as "present" because focal slowing was documented.
+Do not provide explanations, evidence, Markdown, or any text outside the JSON object.
+
+EEG report:
+
+<EEG_REPORT>
+{report}
+</EEG_REPORT>
