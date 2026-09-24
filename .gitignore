@@ -16,10 +16,15 @@ results/*.pid
 results/*.txt
 results/h100_priority_checks/
 results/labels/
+# FHA full-dataset label outputs (hashed IDs) — regenerable, kept out like results/labels/
+results/slowing/
+results/background/
 # Harvard (HEEDB) data lives under a data-use agreement — never publish it
 harvard_llama_results/
 results/harvard/
 results/triphasic_harvard/
+results/slowing_harvard/
+results/background_harvard/
 # large regenerable artifacts (release DBs are shipped from the project release dir)
 results/release/
 results/triphasic/

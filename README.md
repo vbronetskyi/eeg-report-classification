@@ -1,122 +1,118 @@
-# EEG Report Classification with MedGemma-27B
+# EEG report labeling with MedGemma — the full picture
 
-Classifying free-text clinical EEG reports into **five diagnostic labels** — overall
-abnormality, focal/generalized epileptiform activity, and focal/generalized
-non-epileptiform activity — with a small, CPU-runnable, quantized **MedGemma-27B**,
-grammar-constrained via llama.cpp. Benchmarked against the paper's **Mistral-7B**
-(Tian et al.) and a **human** second annotator, on two neurologists' datasets.
+This repository labels free-text clinical EEG reports with a locally-run **MedGemma-27B**, and
+compares the labels against the Harvard EEG Database where a matching field exists. This page is
+the overview: which findings we labeled, on which reports, and how often each turns up. The
+head-to-head comparisons against Harvard's own labels live in the per-topic reports linked below,
+and every run is reproducible from **[REPRODUCE.md](REPRODUCE.md)**.
 
-> **Headline (pooled n = 1994, whole-report accuracy = all five labels correct):**
-> Mistral-7B 74.5% → our best prompt **v5g 87.6%** → human ceiling 89.8%.
-> v5g **beats Mistral-7B on all five categories**, **matches or exceeds the human
-> annotator on the epileptiform categories**, and sits 2.2 points below the human
-> whole-report ceiling — from a ~10 GB Q2_K model on CPU.
->
-> **Full prompt-by-prompt comparison (table, charts, tested-and-rejected ideas,
-> cross-annotator validation): [reports/all_prompts.md](reports/all_prompts.md).**
+## How the labeling works
 
-## Repository structure
+Every finding is read straight from the text of the EEG report. The model records what the
+neurologist wrote — it does not diagnose the patient, so it should not infer a finding from a
+diagnosis, from the clinical context, or from a related pattern. We use MedGemma-27B (a 27B medical
+model) run locally on the cluster at temperature 0, with a grammar that constrains the output, so
+every report comes back in a valid, parseable form. Most findings are a three-way call — the report
+says it is there (`present`), says it is not (`explicitly_absent`), or does not bring it up
+(`not_mentioned`); the abnormality group uses a 1–4 confidence scale where 3–4 counts as present.
 
-```
-.
-├── src/                  Importable library code (installed via `pip install -e .`)
-│   ├── core/               Annotation schema, prompt variants, cohort building
-│   │   ├── prompt.py         All prompt variants (v1–v8) + GBNF grammar (+ENFORCE_CONSISTENCY)
-│   │   ├── cohort.py         Cohort construction (Zoe, Maria) from the annotation DBs
-│   │   └── fields.py         Field definitions and helpers
-│   ├── cpu/                llama.cpp CPU inference path (evaluator, chunk runner)
-│   └── gpu/                GPU inference path
-│
-├── prompts/              Each prompt variant as a versioned .txt + export_prompts.py
-├── slurm/                Cluster job scripts (run_benchmark, make_gguf, gpu_*)
-├── analysis/             Analysis & figure-generation scripts (lib, tables, error analysis, plots)
-├── experiments/          Dated experiment records: hypothesis, Slurm job IDs, findings
-├── results/              Per-run model outputs as JSON — the reproducible source of every number
-├── reports/              Human-readable write-ups (.md + .pdf) and their figures/
-├── communications/       Emails to collaborators + the exact prompt attached
-├── reference/            External: the Mistral paper's pipeline (Tian et al.) — gitignored
-└── scripts/              Repo maintenance (e.g. the reorganization script)
-```
+Two datasets:
 
-**Folder rationale**
-- **`src/` vs `analysis/`** — `src/` is the reusable library (schema, prompts, inference);
-  `analysis/` is project-specific scripts that read `results/*.json`. Clean import boundary.
-- **`prompts/`** — prompts are a first-class research artifact; each variant is a plain
-  text file regenerated from `src/core/prompt.py` (single source of truth).
-- **`experiments/`** — one dated folder per experiment batch (hypothesis, job IDs,
-  outcome). The project's lab notebook.
-- **`results/` is committed** — the JSONs hold only predictions, per-class probabilities,
-  and reference labels (never report text or IDs), so every figure and table regenerates
-  offline from the repo.
+- **Fraser Health (FHA)** — 45,545 reports, the local corpus.
+- **Harvard (HEEDB)** — three hospitals with report text: MGH (55,557), BWH (21,035), BCH (25,022).
+  BIDMC is excluded because its report text is not in the shared data.
 
-## The five labels
+## What we labeled — eleven findings in four groups
 
-| Label | Meaning |
+| group | findings | scoring | reports |
+|---|---|---|---|
+| **Abnormality** | overall abnormal/normal; focal & generalized *epileptiform*; focal & generalized *non-epileptiform* | joint, 1–4 (present = 3–4) | [vs Mistral](reports/medgemma_vs_mistral.md) · [vs Bio-Medical-Llama](reports/medgemma_vs_biomedllama.md) · [on Harvard](reports/medgemma_vs_biomedllama_abnormality.md) |
+| **Triphasic waves** | triphasic waves (+ phenotype) | three-way | [FHA](reports/triphasic_waves.md) · [Harvard](reports/triphasic_harvard.md) |
+| **Slowing** | focal slowing; generalized slowing | three-way | [report](reports/slowing_vs_harvard.md) |
+| **Background** | discontinuous; burst-suppression; suppressed | three-way | [combined](reports/background_patterns.md) · [discontinuous](reports/discontinuous_background.md) · [burst-suppression](reports/burst_suppression.md) · [suppressed](reports/suppressed_background.md) |
+
+The abnormality group came first and its two *non-epileptiform* buckets are deliberately broad —
+they lump slowing together with attenuation, asymmetry, disorganization and excessive beta. The
+later slowing group carves out slowing on its own, which is why "focal non-epileptiform" (26%) and
+the dedicated "focal slowing" (26%) look similar but are not the same field.
+
+## How often each finding appears — Fraser Health
+
+![Present rate of every finding on Fraser Health](reports/figures/overview_fha_prevalence.png)
+
+| finding | present (FHA) |
 |---|---|
-| Abnormality | Is the EEG abnormal at all |
-| Focal epileptiform | Epileptiform discharges in one region |
-| Generalized epileptiform | Epileptiform discharges across the whole brain |
-| Focal non-epileptiform | Non-epileptic disturbance (slowing) in one region |
-| Generalized non-epileptiform | Non-epileptic disturbance diffusely (e.g. encephalopathy) |
+| abnormal | 45.4% |
+| focal epileptiform | 8.6% |
+| generalized epileptiform | 6.0% |
+| focal non-epileptiform | 26.1% |
+| generalized non-epileptiform | 24.2% |
+| triphasic waves | 1.0% |
+| focal slowing | 25.6% |
+| generalized slowing | 23.0% |
+| discontinuous background | 0.1% |
+| burst-suppression | 1.1% |
+| suppressed background | 1.0% |
 
-Per-label scale: 1 confident-no · 2 low-no · 3 low-yes · 4 confident-yes; "present" =
-score ≥ 3. Primary metric: **Core F1** vs reference annotator LD.
+The shape is what routine EEG looks like: about half the studies are abnormal; slowing is the most
+common specific abnormality; epileptiform findings are less frequent; and the critical-care
+background patterns — triphasic, discontinuous, burst-suppression, suppressed — are all rare, around
+1% or below. Discontinuous is the rarest because Fraser Health reports almost never comment on
+continuity at all.
 
-## Prompt variants
+## How often each finding appears — Harvard (our labels)
 
-| Variant | What it adds |
-|---|---|
-| v1 | Original baseline (Impression-first, short definitions) |
-| v2 | Professor's revision (neurologist role, body-first, extended ACNS/ILAE definitions) |
-| v3 | v1 + explicit focal-epileptiform exclusions (precision) |
-| v4 | v1 + structured detect→localize procedure |
-| v5 | v3 + focal-vs-generalized discriminator for non-epileptiform slowing |
-| v6 | v3 + prompt-only consistency reconciliation (asking the model) |
-| v7 | v5 + body-aware abnormality (targets missed body findings) |
-| v8 | Deliberately simplified/lean prompt (relies on the grammar for consistency) |
+| finding | MGH | BWH | BCH |
+|---|---|---|---|
+| abnormal | 67% | 78% | 57% |
+| triphasic waves | 4.4% | 11.2% | 0.5% |
+| focal slowing | 34.5% | 50.6% | 17.7% |
+| generalized slowing | 60.6% | 50.5% | 30.6% |
+| discontinuous background | 2.6% | 3.4% | 7.5% |
+| burst-suppression | 3.5% | 3.0% | 1.3% |
+| suppressed background | 1.4% | 2.9% | 0.9% |
 
-`ENFORCE_CONSISTENCY=1` adds a GBNF grammar that makes a self-contradictory answer
-undecodable (overall label emitted last, forced to agree with the subtypes). Variants
-run this way are tagged `…g` in results (e.g. `v5g`). It is the single biggest lever and
-also lifts the epileptiform-category F1.
+The Harvard reports come from large academic centers with heavy critical-care and monitoring
+caseloads, so the abnormal rate and the background patterns run higher than at Fraser Health, and
+they vary by hospital. BCH is a children's hospital, which is why triphasic waves (a metabolic/anoxic
+marker) are almost absent there (0.5%), while discontinuous background — a normal feature of the
+immature/neonatal EEG — is the most common of the three there (7.5%). These are population
+differences, not the model behaving differently — the same annotation runs on both datasets.
 
-## Quickstart
+## How much to trust the labels
+
+There is no human-labeled ground truth for the full sets, but there are independent checks:
+
+- **Abnormality** was validated against a human annotator on ~2,500 reports: F1 of 96 on the overall
+  abnormal call, mid-to-high 80s on the harder findings, and the model's own confidence sorts the
+  labels well (confident calls ~99% correct, borderline ~80%). See
+  [reports/medgemma_vs_mistral.md](reports/medgemma_vs_mistral.md).
+- **Triphasic** was run twice with different prompt wordings and agrees with itself on 99.9% of
+  reports (κ = 0.99) on both datasets; a text-guard removes the one recurring error (reading
+  triphasic waves into an anoxic picture with no triphasic wording in the text).
+- **Slowing and background** are grammar-constrained three-way calls; every report returned a valid
+  label, and the split is reported as-is.
+
+So the percentages above are the model's reading of the reports, backed by validation on abnormality
+and by prompt-stability and text checks on the rest — not a clinically verified rate.
+
+## Reports
+
+- **Abnormality** — [medgemma_vs_mistral.md](reports/medgemma_vs_mistral.md) (vs Mistral + accuracy
+  vs human on FHA), [medgemma_vs_biomedllama_abnormality.md](reports/medgemma_vs_biomedllama_abnormality.md)
+  (vs Harvard's own model).
+- **Triphasic** — [triphasic_waves.md](reports/triphasic_waves.md) (FHA),
+  [triphasic_harvard.md](reports/triphasic_harvard.md) (Harvard).
+- **Slowing** — [slowing_vs_harvard.md](reports/slowing_vs_harvard.md).
+- **Background** — [background_patterns.md](reports/background_patterns.md) and the three per-field
+  notes: [discontinuous](reports/discontinuous_background.md),
+  [burst_suppression](reports/burst_suppression.md), [suppressed](reports/suppressed_background.md).
+- **Consolidated Harvard comparison** — [eeg_labeling_summary.md](reports/eeg_labeling_summary.md).
+- **How Harvard's own labels are coded** — [harvard_llm_labeling.md](reports/harvard_llm_labeling.md).
+- **Reproducing everything** — [REPRODUCE.md](REPRODUCE.md).
+
+## Reproduce this overview figure
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e .                      # installs core/cpu/gpu from src/ + deps
-
-python -m analysis.make_tables        # regenerate every metric table from results/
-python -m analysis.plot_v34           # regenerate comparison charts -> reports/figures/
-python prompts/export_prompts.py      # regenerate prompts/v*.txt from src/core/prompt.py
+python -m analysis.overview_prevalence   # reports/figures/overview_fha_prevalence.png
 ```
-
-## Running a benchmark (Slurm / CPU)
-
-Everything is env-selected; nothing is hard-coded per run:
-
-```bash
-DATASET=zoe GGUF_QUANT=Q2_K PROMPT_VARIANT=v5 CTX_SIZE=8192 \
-  sbatch slurm/run_benchmark.sbatch 0 1495 results/zoe_v5_cpu_q2_k_full_n1495.json
-
-# with grammar-enforced consistency (our best setup, v5g):
-ENFORCE_CONSISTENCY=1 DATASET=zoe GGUF_QUANT=Q2_K PROMPT_VARIANT=v5 CTX_SIZE=8192 \
-  sbatch slurm/run_benchmark.sbatch 0 1495 results/zoe_v5g_cpu_q2_k_full_n1495.json
-```
-
-| Variable | Values | Meaning |
-|---|---|---|
-| `DATASET` | `zoe` \| `maria` | which neurologist's dataset |
-| `GGUF_QUANT` | `Q2_K` \| `Q4_K_S` | model quantization (~10 GB / ~15 GB) |
-| `PROMPT_VARIANT` | `v1`…`v8` | prompt version (see `prompts/`) |
-| `ENFORCE_CONSISTENCY` | `1` | hard-enforce schema consistency in the grammar |
-| `CTX_SIZE` | int | context window (8192 for the longer prompts) |
-
-## Reproducibility & privacy
-
-Every figure and number regenerates from `results/*.json` via `analysis/`; prompts from
-`src/core/prompt.py` via `prompts/export_prompts.py`; reports rebuild to PDF via
-`reports/build_pdfs.sh`. Model: MedGemma-27B GGUF (Q2_K / Q4_K_S), llama.cpp
-grammar-constrained, temperature 0, 64-core CPU. Raw annotation databases live outside
-the repo (institutional storage); result JSONs store only model predictions,
-probabilities, and the LD/SG reference labels — never report text or hashed identifiers.
